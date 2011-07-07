@@ -1,0 +1,9 @@
+String strCameraParam = x10Parameters.flatten();
+        
+        Context context = getApplicationContext();
+        Toast toast = Toast.makeText(context,
+        							strCameraParam,
+        							Toast.LENGTH_LONG);
+        toast.show();
+        
+        Log.e("Param of Sony X10", strCameraParam);

@@ -1,0 +1,27 @@
+07-05 14:58:19.785: ERROR/Param of Sony X10(4883):
+picture-size-values=640x480,1632x1224,1920x1080,3264x1836,3264x2448;
+antibanding=auto;
+whitebalance=auto;
+jpeg-thumbnail-height=120;
+scene-mode=auto;
+jpeg-quality=100;
+preview-format-values=yuv420sp;
+jpeg-thumbnail-quality=100;
+focus-mode=macro;
+preview-format=yuv420sp;
+preview-size=640x480;
+auto-exposure-values=frame-average,center-weighted,spot-metering;
+picture-format-values=jpeg;
+preview-frame-rate-values=7,10,12,15,24,30;
+preview-frame-rate=15;
+effect-values=none,mono,negative,sepia,posterize;
+focus-mode-values=auto,macro,full,infinity;
+picture-size=640x480;
+effect=none;
+jpeg-thumbnail-width=160;
+whitebalance-values=auto,incandescent,fluorescent,daylight,cloudy-daylight;
+scene-mode-values=auto,portrait,landscape,night,night-portrait,beach_snow,sports,document,party;
+picture-format=jpeg;
+auto-exposure=frame-average;
+preview-size-values=320x240,640x480,800x480,848x480,854x480,864x480,1280x720;
+antibanding-values=off,50hz,60hz,auto
