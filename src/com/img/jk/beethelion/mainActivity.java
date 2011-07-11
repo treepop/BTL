@@ -1,6 +1,8 @@
 /* Bug that has been corrected yet.
  * 7 July 54 preview image was wrong orientation but when it was corrected,
- * take picture button was wrong orientation instead. 
+ * take picture button was wrong orientation instead.
+ * This bug was solved.
+ *  
  * 7 July 54 I think macro wasn't effect.
  */
 
@@ -10,12 +12,13 @@ import java.io.IOException;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -58,8 +61,9 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
 				 x10Camera.takePicture(shutterCallback, rawCallback, jpegCallback);
 			}
 		});
-        // This line has bug. The screen has wrong obj orientation.
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        /*This line has bug. The screen has wrong obj orientation.
+        This command doesn't correct the orientation bug.
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);*/
     }
     
     ShutterCallback shutterCallback = new ShutterCallback() {
@@ -117,7 +121,37 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
         List<Camera.Size> x10PreSizeMode = x10Parameters.getSupportedPreviewSizes();
         x10Parameters.setPreviewSize(1280, 720);
         
+        // Fix bug wrong orientation.
+        if(this.getResources().getConfiguration().orientation !=
+        	Configuration.ORIENTATION_LANDSCAPE) {
+        	// This is an undocumented although widely known feature.
+        	x10Parameters.set("orientation", "portrait");
+        	
+        	// For Android 2.2 and above
+        	//x10Camera.setDisplayOrientation(90);
+        	
+        	// Uncomment for Android 2.0 and above
+        	//x10Parameters.setRotation(90);
+        } else {
+        	// This is an undocumented although widely known feature.
+        	x10Parameters.set("orientation", "landscape");
+        	
+        	// For Android 2.2 and above
+        	//x10Camera.setDisplayOrientation(0);
+        	
+        	// Uncomment for Android 2.0 and above
+        	//x10Parameters.setRotation(0);
+        }
+        
         x10Camera.setParameters(x10Parameters);
+        try {
+        	x10Camera.setPreviewDisplay(holder);
+		} catch (IOException exception) {
+			x10Camera.release();
+			Log.v("LOGTAG", exception.getMessage());
+		}
+		x10Camera.startPreview();
+		mPreviewRunning = true;
         
         // For debug.
         // =========
@@ -144,20 +178,16 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		try {
-			if(mPreviewRunning) {
-				x10Camera.stopPreview();
-				mPreviewRunning = false;
-			}
-			Camera.Parameters p = x10Camera.getParameters();
-			p.setPictureSize(width, height);
-			x10Camera.setParameters(p);
-			x10Camera.setPreviewDisplay(holder);
-			x10Camera.startPreview();
-			mPreviewRunning = true;
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		if(mPreviewRunning) {
+			x10Camera.stopPreview();
+			mPreviewRunning = false;
 		}
+		Camera.Parameters p = x10Camera.getParameters();
+		p.setPictureSize(width, height);
+		x10Camera.setParameters(p);
+		x10Camera.startPreview();
+		mPreviewRunning = true;
 	}
 	
 	@Override
