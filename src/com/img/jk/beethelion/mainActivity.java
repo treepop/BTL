@@ -170,7 +170,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
 				// -------------
 				
 				jpegData = data;
-				String fNameUnknowFlower = "unknowFlower.jpg";
+				String fNameUnknownFlower = "unknownFlower.jpg";
 				File sdDir = Environment.getExternalStorageDirectory();
 				if(sdDir.exists()) {
 					if(sdDir.canWrite()) {
@@ -179,23 +179,23 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
 							beeDir.mkdir();
 						}
 						if(beeDir.exists() && beeDir.canWrite()) {
-							File fileUnknowFlower = new File(beeDir.getAbsolutePath()+
-									"/"+fNameUnknowFlower);
+							File fileUnknownFlower = new File(beeDir.getAbsolutePath()+
+									"/"+fNameUnknownFlower);
 							try {
-								fileUnknowFlower.createNewFile();
+								fileUnknownFlower.createNewFile();
 							} catch(IOException e) {
 								Toast.makeText(mainActivity.this,
 										e.getMessage(),
 										Toast.LENGTH_LONG).show();
 								Log.e("jkError", e.getMessage());
 							}
-							if(fileUnknowFlower.exists() &&
-									fileUnknowFlower.canWrite()) {
+							if(fileUnknownFlower.exists() &&
+									fileUnknownFlower.canWrite()) {
 								// FileOutputStream fos = null;
 								BufferedOutputStream fos = null;
 								try {
 									fos = new BufferedOutputStream(
-											new FileOutputStream(fileUnknowFlower));
+											new FileOutputStream(fileUnknownFlower));
 									// fos.write(jpegData);
 									rotatedBmp.compress(CompressFormat.JPEG, 100, fos);
 								} catch(FileNotFoundException e) {
@@ -288,7 +288,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
         	x10Parameters.set("orientation", "portrait");
         	
         	// For Android 2.2 and above
-        	//x10Camera.setDisplayOrientation(90);
+        	x10Camera.setDisplayOrientation(90);
         	
         	// Uncomment for Android 2.0 and above
         	//x10Parameters.setRotation(90);
@@ -297,7 +297,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
         	x10Parameters.set("orientation", "landscape");
         	
         	// For Android 2.2 and above
-        	//x10Camera.setDisplayOrientation(0);
+        	x10Camera.setDisplayOrientation(0);
         	
         	// Uncomment for Android 2.0 and above
         	//x10Parameters.setRotation(0);
