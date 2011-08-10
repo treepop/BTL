@@ -60,6 +60,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class mainActivity extends Activity implements SurfaceHolder.Callback {
@@ -91,11 +92,14 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
         this.addContentView(overlayView,
         		new LayoutParams(LayoutParams.FILL_PARENT,
         				LayoutParams.FILL_PARENT));
-        
         // Connect take picture button.
-        Button takePictureBtn;
-        takePictureBtn = (Button)findViewById(R.id.button);
+        ImageButton takePictureBtn;
+        takePictureBtn = (ImageButton)findViewById(R.id.cameraBtn);
         takePictureBtn.setOnClickListener(new OnClickListener() {
+//        // Connect take picture button.
+//        Button takePictureBtn;
+//        takePictureBtn = (Button)findViewById(R.id.button);
+//        takePictureBtn.setOnClickListener(new OnClickListener() {
         	
         	@Override
         	public void onClick(View v) {
@@ -104,31 +108,31 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
 		});
         
         // Connect macro button.
-        macroBtn = (Button)findViewById(R.id.macroBtn);
-        macroBtn.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if(inMacro) {
-					x10Camera.stopPreview();
-					Camera.Parameters x10Parameters = x10Camera.getParameters();
-					x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-					x10Camera.setParameters(x10Parameters);
-					macroBtn.setText("Auto Focus");
-					inMacro = false;
-					x10Camera.startPreview();
-				} else {
-					x10Camera.stopPreview();
-					Camera.Parameters x10Parameters = x10Camera.getParameters();
-					x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
-					x10Camera.setParameters(x10Parameters);
-					macroBtn.setText("Macro");
-					inMacro = true;
-					x10Camera.startPreview();
-				}
-			}
-		});
-        
+//        macroBtn = (Button)findViewById(R.id.macroBtn);
+//        macroBtn.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				if(inMacro) {
+//					x10Camera.stopPreview();
+//					Camera.Parameters x10Parameters = x10Camera.getParameters();
+//					x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+//					x10Camera.setParameters(x10Parameters);
+//					macroBtn.setText("Auto Focus");
+//					inMacro = false;
+//					x10Camera.startPreview();
+//				} else {
+//					x10Camera.stopPreview();
+//					Camera.Parameters x10Parameters = x10Camera.getParameters();
+//					x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+//					x10Camera.setParameters(x10Parameters);
+//					macroBtn.setText("Macro");
+//					inMacro = true;
+//					x10Camera.startPreview();
+//				}
+//			}
+//		});
+//        
         /*This line has bug. The screen has wrong object orientation.
         This following command doesn't correct the orientation bug.
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);*/
