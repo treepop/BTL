@@ -4,7 +4,7 @@
  * Written at 2554-7-4 by Rungkarn Siricharoenchai Project manager.
  * 						  Treepop Sunpetchniyom	   TU Master.
  *  
- * Version 1.7
+ * Version 1.9
  * Platform Android
  *  
  * History
@@ -19,10 +19,13 @@
  * 1.5 try to use macro focus but not work.
  * 1.6 Rotate saved image.
  * 1.7 24 July 54 Fix bug when rotated photo not align.
- * Edit error handling. 
+ * Edit error handling.
+ * 1.8 Don't show the title bar.
+ * 1.9 Move icon to left and right. 
  * 
  * Future work
  * -----------
+ * When take a photo already then ask user to take photo again or matching photo.
  * 
  * Abbreviation for any comment.
  * 
@@ -59,6 +62,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -75,6 +79,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); //Don't show the title bar.
         setContentView(R.layout.main);
         
         // Connect SurfaceView.

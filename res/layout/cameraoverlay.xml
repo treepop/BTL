@@ -1,49 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
-  android:orientation="vertical"
-  android:gravity="bottom"
-  android:layout_gravity="bottom" >
-  
-  <LinearLayout
-  	xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal" 
-    android:gravity="center_horizontal">       
-     <ImageButton 
-		android:id="@+id/logo"
-		android:layout_width="wrap_content"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:gravity="bottom"
+	android:layout_gravity="bottom">
+	<LinearLayout
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:src="@drawable/beelogo"
-		android:layout_marginLeft="5dip"
-		android:background="@android:color/transparent"/>
-		
-        <ImageButton 
-		android:id="@+id/cameraBtn"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:src="@drawable/cameraico"
-		android:layout_centerHorizontal="true"	
-		android:background="@android:color/transparent"/>
-        <ImageButton 
-		android:id="@+id/infoBtn"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:src="@drawable/infoico"
-		android:layout_marginRight="5dip"
-		android:background="@android:color/transparent"/>
-<!--    	<Button-->
-<!--    		android:id="@+id/button"-->
-<!--    		android:layout_width="wrap_content"-->
-<!--    		android:layout_height="wrap_content"-->
-<!--    		android:text="ถ่ายรูป" />-->
-<!--    	<Button-->
-<!--    		android:id="@+id/macroBtn"-->
-<!--    		android:layout_width="wrap_content"-->
-<!--    		android:layout_height="wrap_content"-->
-<!--    		android:text="Auto Focus" />-->
-    </LinearLayout>
+		android:orientation="horizontal"
+		android:gravity="center_horizontal">
+		<TableLayout
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:stretchColumns="0,1,2">
+			<TableRow>
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:gravity="left">
+				<ImageButton android:id="@+id/logo"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/beelogo"
+					android:layout_marginLeft="5dip"
+					android:background="@android:color/transparent" />
+			</LinearLayout>
+				<ImageButton android:id="@+id/cameraBtn"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/cameraico"
+					android:background="@android:color/transparent" />
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:gravity="right">
+				<ImageButton android:id="@+id/infoBtn"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/infoico"
+					android:layout_marginRight="5dip"
+					android:background="@android:color/transparent" />
+			</LinearLayout>
+			</TableRow>
+		</TableLayout>
+		<!-- <Button -->
+		<!-- android:id="@+id/button" -->
+		<!-- android:layout_width="wrap_content" -->
+		<!-- android:layout_height="wrap_content" -->
+		<!-- android:text="ถ่ายรูป" /> -->
+		<!-- <Button -->
+		<!-- android:id="@+id/macroBtn" -->
+		<!-- android:layout_width="wrap_content" -->
+		<!-- android:layout_height="wrap_content" -->
+		<!-- android:text="Auto Focus" /> -->
+	</LinearLayout>
 </LinearLayout>
