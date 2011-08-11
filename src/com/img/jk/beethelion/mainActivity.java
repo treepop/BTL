@@ -42,6 +42,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -67,7 +68,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class mainActivity extends Activity implements SurfaceHolder.Callback {
+public class mainActivity extends Activity implements SurfaceHolder.Callback,
+		OnClickListener {
 	
 	private Camera x10Camera;
 	private byte[] jpegData;
@@ -79,7 +81,9 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE); //Don't show the title bar.
+        
+//        requestWindowFeature(Window.FEATURE_NO_TITLE); //Don't show the title bar.
+        
         setContentView(R.layout.main);
         
         // Connect SurfaceView.
@@ -97,6 +101,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
         this.addContentView(overlayView,
         		new LayoutParams(LayoutParams.FILL_PARENT,
         				LayoutParams.FILL_PARENT));
+        
         // Connect take picture button.
         ImageButton takePictureBtn;
         takePictureBtn = (ImageButton)findViewById(R.id.cameraBtn);
@@ -141,6 +146,10 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
         /*This line has bug. The screen has wrong object orientation.
         This following command doesn't correct the orientation bug.
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);*/
+        
+        View infoBtn = findViewById(R.id.infoBtn);
+        infoBtn.setOnClickListener(this); // If you new inner class here, it take up
+        	// an extra 1KB of memory.
     }
     
     ShutterCallback previewCallback = new ShutterCallback() {
@@ -368,5 +377,15 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback {
 		mPreviewRunning = false;
 		x10Camera.release();
 		x10Camera = null;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()) {
+		case R.id.infoBtn:
+			Intent i = new Intent(this,About.class);
+			startActivity(i);
+			break;
+		}
 	}
 }
