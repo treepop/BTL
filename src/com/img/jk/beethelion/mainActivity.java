@@ -260,6 +260,11 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 	public void surfaceCreated(SurfaceHolder holder) {
 		x10Camera = Camera.open();
 		Camera.Parameters x10Parameters = x10Camera.getParameters();
+		
+		// Display all of supported parameters.
+		// Uncommented this for debug.
+		/*String strCameraParam = x10Parameters.flatten();
+        Log.e("Param of Sony X10", strCameraParam);*/
         
 		// Set focus to auto focus mode.
         /*List<String> x10FocusMode = x10Parameters.getSupportedFocusModes();

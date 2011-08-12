@@ -1,0 +1,18 @@
+วิธี Set focus macro
+URL = http://jh20a.tistory.com/74
+
+close_up.setOnCheckedChangeListener(new OnCheckedChangeListener(){ 
+ public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    // TODO Auto-generated method stub
+        if (isChecked) {
+      Parameters params = mPreview.mCamera.getParameters();
+      params.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO); //????
+      mPreview.mCamera.setParameters(params);
+      mDrawOnTop.drawSet="(!) ?? ?? ???"; // ??? ??
+     } else {
+      Parameters params = mPreview.mCamera.getParameters();
+      params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO); // ??????
+      mPreview.mCamera.setParameters(params);
+      mDrawOnTop.drawSet="(!) ?? ?? ?????";
+     }
+   }
