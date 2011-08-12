@@ -63,26 +63,24 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		OnClickListener {
-	
+
 	private Camera x10Camera;
-	private byte[] jpegData;
-	private boolean mPreviewRunning = false;
+	
+	/*private boolean mPreviewRunning = false;
 	private Button macroBtn;
-	private boolean inMacro = false;
+	private boolean inMacro = false;*/
 	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-//        requestWindowFeature(Window.FEATURE_NO_TITLE); //Don't show the title bar.
+        // requestWindowFeature(Window.FEATURE_NO_TITLE); //Don't show the title bar.
         
         setContentView(R.layout.main);
         
@@ -105,11 +103,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         // Connect take picture button.
         ImageButton takePictureBtn;
         takePictureBtn = (ImageButton)findViewById(R.id.cameraBtn);
-        takePictureBtn.setOnClickListener(new OnClickListener() {
-//        // Connect take picture button.
-//        Button takePictureBtn;
-//        takePictureBtn = (Button)findViewById(R.id.button);
-//        takePictureBtn.setOnClickListener(new OnClickListener() {
+        takePictureBtn.setOnClickListener(new OnClickListener() {        	
         	
         	@Override
         	public void onClick(View v) {
@@ -118,56 +112,56 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		});
         
         // Connect macro button.
-//        macroBtn = (Button)findViewById(R.id.macroBtn);
-//        macroBtn.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				if(inMacro) {
-//					x10Camera.stopPreview();
-//					Camera.Parameters x10Parameters = x10Camera.getParameters();
-//					x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-//					x10Camera.setParameters(x10Parameters);
-//					macroBtn.setText("Auto Focus");
-//					inMacro = false;
-//					x10Camera.startPreview();
-//				} else {
-//					x10Camera.stopPreview();
-//					Camera.Parameters x10Parameters = x10Camera.getParameters();
-//					x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
-//					x10Camera.setParameters(x10Parameters);
-//					macroBtn.setText("Macro");
-//					inMacro = true;
-//					x10Camera.startPreview();
-//				}
-//			}
-//		});
-//        
+        /*macroBtn = (Button)findViewById(R.id.macroBtn);
+        macroBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(inMacro) {
+					x10Camera.stopPreview();
+					Camera.Parameters x10Parameters = x10Camera.getParameters();
+					x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+					x10Camera.setParameters(x10Parameters);
+					macroBtn.setText("Auto Focus");
+					inMacro = false;
+					x10Camera.startPreview();
+				} else {
+					x10Camera.stopPreview();
+					Camera.Parameters x10Parameters = x10Camera.getParameters();
+					x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+					x10Camera.setParameters(x10Parameters);
+					macroBtn.setText("Macro");
+					inMacro = true;
+					x10Camera.startPreview();
+				}
+			}
+		});*/
+
         /*This line has bug. The screen has wrong object orientation.
         This following command doesn't correct the orientation bug.
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);*/
         
-        View infoBtn = findViewById(R.id.infoBtn);
+        ImageButton infoBtn = (ImageButton)findViewById(R.id.infoBtn);
         infoBtn.setOnClickListener(this); // If you new inner class here, it take up
         	// an extra 1KB of memory.
-    }
+    } // End onCreate.
     
     ShutterCallback previewCallback = new ShutterCallback() {
-    // For manipulate preview image.
+    // For manipulation of preview image.
 		
 		@Override
 		public void onShutter() {}
 	};
 	
     PictureCallback rawCallback = new PictureCallback() {
-    // For manipulate raw image.
+    // For manipulation of raw image.
 		
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {}
 	};
 	
 	PictureCallback jpegCallback = new PictureCallback() {
-	// For manipulate jpeg image.
+	// For manipulation of jpeg image.
 		
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
@@ -187,7 +181,10 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 				canvas.drawBitmap(bmp, matrix, paint);
 				// -------------
 				
-				jpegData = data;
+				// Write image on global variable.
+				GlobalVar gbV = (GlobalVar)getApplicationContext();
+				gbV.setBmpPhoto(rotatedBmp);
+				
 				String fNameUnknownFlower = "unknownFlower.jpg";
 				File sdDir = Environment.getExternalStorageDirectory();
 				if(sdDir.exists()) {
@@ -254,7 +251,9 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 	};
 	
 	void done() {
-		finish(); // Exit program.
+		Intent i = new Intent(this,ShowTakenPhoto.class);
+		startActivity(i);
+		// finish(); // Exit program.
 	}
 	
 	@Override
@@ -263,14 +262,14 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		Camera.Parameters x10Parameters = x10Camera.getParameters();
         
 		// Set focus to auto focus mode.
-        List<String> x10FocusMode = x10Parameters.getSupportedFocusModes();
+        /*List<String> x10FocusMode = x10Parameters.getSupportedFocusModes();
         if(x10FocusMode.contains(Camera.Parameters.FOCUS_MODE_AUTO))
-        	x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        	x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);*/
 		
 		// Set focus to macro mode.
-        /*List<String> x10FocusMode = x10Parameters.getSupportedFocusModes();
+        List<String> x10FocusMode = x10Parameters.getSupportedFocusModes();
         if(x10FocusMode.contains(Camera.Parameters.FOCUS_MODE_MACRO))
-        	x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);*/
+        	x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
         
         // Set picture size.
         List<Camera.Size> x10PicSizeMode = x10Parameters.getSupportedPictureSizes();
@@ -320,6 +319,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         	// Uncomment for Android 2.0 and above
         	//x10Parameters.setRotation(0);
         }
+        // --------------------------
         
         x10Camera.setParameters(x10Parameters);
         try {
@@ -331,7 +331,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 			Log.e("jkError", exception.getMessage());
 		}
 		x10Camera.startPreview();
-		mPreviewRunning = true;
+//		mPreviewRunning = true;
         
         // For debug.
         // =========
@@ -374,7 +374,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		x10Camera.stopPreview();
-		mPreviewRunning = false;
+//		mPreviewRunning = false;
 		x10Camera.release();
 		x10Camera = null;
 	}

@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+<!-- main.xml -->
     <string name="hello">Hello World, mainActivity!</string>
     <string name="app_name">Bee the Lion</string>
+    
+<!-- showtakenphoto.xml -->
+	<string name="showtakenphoto_title">จะใช้รูปนี้ในการค้นหาหรือไม่ ?</string>
+	
+<!-- about.xml -->
     <string name="about_title">เกี่ยวกับผึ้งใจสิงห์</string>
     <string name="about_text">\
 วิธีการใช้โปรแกรมผึ้งใจสิงห์
 <i>1</i>ถ่ายรูปดอกไม้ที่ต้องการ ถ่ายเดี่ยวๆ ชัดๆ ให้เกือบเต็มจอภาพ
 <i>2</i>โปรแกรมจะทำการค้นหาดอกไม้ที่เหมือนให้</string>
+
 </resources>
