@@ -193,6 +193,8 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 						if(!beeDir.exists()) {
 							beeDir.mkdir();
 						}
+						// Keep beeDir on global variable.
+						gbV.setStrBeeDir(beeDir.getAbsolutePath() + "/");
 						if(beeDir.exists() && beeDir.canWrite()) {
 							File fileUnknownFlower = new File(beeDir.getAbsolutePath()+
 									"/"+fNameUnknownFlower);
