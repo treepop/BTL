@@ -59,7 +59,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener {
 				while((line = br.readLine()) != null)
 				{
 					// Call function to create unique rank of species.
-					Toast.makeText(this, line, Toast.LENGTH_SHORT).show();
+					gbV.addFlowerRank(line);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -73,6 +73,13 @@ public class ShowTakenPhoto extends Activity implements OnClickListener {
 				}
 			}
 
+			// How to get the flower rank.
+			// An example code for Karn.
+			for(String strFlower:gbV.flowerRank) {
+				strFlower = strFlower.concat("-1.jpg");
+				Toast.makeText(this, strFlower.toString(), Toast.LENGTH_SHORT).show();
+			}
+			
 			break;
 		case R.id.rejectBtn:
 			this.finish();

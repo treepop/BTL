@@ -11,7 +11,7 @@
 //		image_0008.jpg	5.76509
 //		image_0002.jpg	6.10517
 //
-#define _JKDEBUG
+// #define _JKDEBUG
 // ========================
 
 // C++ header.
