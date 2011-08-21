@@ -54,6 +54,8 @@ import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -67,9 +69,11 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class mainActivity extends Activity implements SurfaceHolder.Callback,
-		OnClickListener {
+		OnClickListener,OnCompletionListener {
 
 	private Camera x10Camera;
+//	MediaPlayer mediaPlayerBee;
+	MediaPlayer mediaPlayerBB;
 	
 	/*private boolean mPreviewRunning = false;
 	private Button macroBtn;
@@ -390,9 +394,33 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 	public void onClick(View v) {
 		switch(v.getId()) {
 		case R.id.infoBtn:
+			// Play sound effect click.
+			mediaPlayerBB = MediaPlayer.create(this, R.raw.blackberry);
+			mediaPlayerBB.start();
 			Intent i = new Intent(this,About.class);
 			startActivity(i);
 			break;
 		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		/*mediaPlayerBee = MediaPlayer.create(this, R.raw.bee);
+		mediaPlayerBee.setLooping(true);
+		mediaPlayerBee.start();*/
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		/*mediaPlayerBee.stop();
+		mediaPlayerBee.release();*/
+	}
+
+	@Override
+	public void onCompletion(MediaPlayer arg0) {
+		mediaPlayerBB.stop();
+		mediaPlayerBB.release();
 	}
 }

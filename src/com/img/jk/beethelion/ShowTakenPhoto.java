@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,9 +16,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class ShowTakenPhoto extends Activity implements OnClickListener {
+public class ShowTakenPhoto extends Activity implements OnClickListener,
+		OnCompletionListener {
 	
 	GlobalVar gbV;
+	MediaPlayer mediaPlayerBB;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,10 @@ public class ShowTakenPhoto extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch(v.getId()) {
 		case R.id.acceptBtn:
+			// Play sound effect click.
+			mediaPlayerBB = MediaPlayer.create(this, R.raw.blackberry);
+			mediaPlayerBB.start();
+			
 			Toast.makeText(this, "Call matching module.", Toast.LENGTH_SHORT).show();
 			long timerStart,timerStop;
 			timerStart = System.currentTimeMillis();
@@ -81,11 +89,27 @@ public class ShowTakenPhoto extends Activity implements OnClickListener {
 			}
 			
 			break;
+			
 		case R.id.rejectBtn:
+			// Play sound effect click.
+			mediaPlayerBB = MediaPlayer.create(this, R.raw.blackberry);
+			mediaPlayerBB.start();
+			
 			this.finish();
 			break;
+			
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onCompletion(MediaPlayer mp) {
+//		How to distinct each mediaPlayer?
+//		if(mp == mediaPlayerBB) {
+			mediaPlayerBB.stop();
+			mediaPlayerBB.release();
+//		}
+		
 	}
 }
