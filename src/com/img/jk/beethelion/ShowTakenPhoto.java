@@ -21,6 +21,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 	
 	GlobalVar gbV;
 	MediaPlayer mediaPlayerBB;
+	MediaPlayer mediaPlayerBee;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +45,19 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			// Play sound effect click.
 			mediaPlayerBB = MediaPlayer.create(this, R.raw.blackberry);
 			mediaPlayerBB.start();
+			mediaPlayerBee = MediaPlayer.create(this, R.raw.bee);
+			mediaPlayerBee.setLooping(true);
+			mediaPlayerBee.start();
 			
 			Toast.makeText(this, "Call matching module.", Toast.LENGTH_SHORT).show();
 			long timerStart,timerStop;
 			timerStart = System.currentTimeMillis();
 			gbV.setStrFNameResultMatching(MatchingLib.jkMatching(gbV.getStrBeeDir()));
 			timerStop = System.currentTimeMillis();
+			
+			mediaPlayerBee.stop();
+			mediaPlayerBee.release();
+			
 			Toast.makeText(this, String.format("Used time = %f sec",
 					(timerStop - timerStart)/1000.0), Toast.LENGTH_LONG).show();
 			
@@ -109,7 +117,6 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 //		if(mp == mediaPlayerBB) {
 			mediaPlayerBB.stop();
 			mediaPlayerBB.release();
-//		}
-		
+//		}		
 	}
 }
