@@ -1,5 +1,11 @@
 package com.img.jk.beethelion;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -38,6 +44,35 @@ public class ShowTakenPhoto extends Activity implements OnClickListener {
 			timerStop = System.currentTimeMillis();
 			Toast.makeText(this, String.format("Used time = %f sec",
 					(timerStop - timerStart)/1000.0), Toast.LENGTH_LONG).show();
+			
+			// Read rank photo and give it to vector.
+			File rankFile = new File(gbV.getStrFNameResultMatching());
+			FileReader fr = null;
+			try {
+				fr = new FileReader(rankFile);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			BufferedReader br = new BufferedReader(fr);
+			String line;
+			try {
+				while((line = br.readLine()) != null)
+				{
+					// Call function to create unique rank of species.
+					Toast.makeText(this, line, Toast.LENGTH_SHORT).show();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			finally {
+				if(br != null)
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
 			break;
 		case R.id.rejectBtn:
 			this.finish();
