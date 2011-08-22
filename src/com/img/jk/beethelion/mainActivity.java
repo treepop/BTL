@@ -79,6 +79,9 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 	private Button macroBtn;
 	private boolean inMacro = false;*/
 	
+	public static final int LARGEST_WIDTH = 800;
+	public static final int LARGEST_HEIGHT = 600;
+	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -283,13 +286,20 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         	x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
         
         // Set picture size.
+        int bestWidth = 0;
+        int bestHeight = 0;
         List<Camera.Size> x10PicSizeMode = x10Parameters.getSupportedPictureSizes();
         Iterator<Camera.Size> iterPicSizeMode = x10PicSizeMode.iterator();
         while(iterPicSizeMode.hasNext()) {
         	Camera.Size item = iterPicSizeMode.next();
-        	if(item.width == 640 && item.height == 480) {
-        		x10Parameters.setPictureSize(640, 480);
+        	if(item.width > bestWidth && item.width <= LARGEST_WIDTH
+        			&& item.height > bestHeight && item.height <= LARGEST_HEIGHT) {
+        		bestWidth = item.width;
+        		bestHeight = item.height;
         	}
+        }
+        if(bestWidth != 0 && bestHeight != 0) {
+        	x10Parameters.setPictureSize(bestWidth, bestHeight);
         }
         
         // Set preview frame rate.
@@ -299,13 +309,20 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         	x10Parameters.setPreviewFrameRate(30);
         
         // Set preview size.
+        bestWidth = 0;
+        bestHeight = 0;
         List<Camera.Size> x10PreSizeMode = x10Parameters.getSupportedPreviewSizes();
         Iterator<Camera.Size> iterPreSizeMode = x10PreSizeMode.iterator();
         while(iterPreSizeMode.hasNext()) {
         	Camera.Size item = iterPreSizeMode.next();
-        	if(item.width == 320 && item.height == 240) {
-        		x10Parameters.setPreviewSize(320, 240);
+        	if(item.width > bestWidth && item.width <= LARGEST_WIDTH
+        			&& item.height > bestHeight && item.height <= LARGEST_HEIGHT) {
+        		bestWidth = item.width;
+        		bestHeight = item.height;
         	}
+        }
+        if(bestWidth != 0 && bestHeight != 0) {
+        	x10Parameters.setPreviewSize(bestWidth, bestHeight);
         }
         
         
