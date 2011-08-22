@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+
+
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -89,13 +91,11 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 				}
 			}
 
-			// How to get the flower rank.
-			// An example code for Karn.
-			for(String strFlower:gbV.flowerRank) {
-				strFlower = strFlower.concat("-1.jpg");
-				Toast.makeText(this, strFlower.toString(), Toast.LENGTH_SHORT).show();
-			}
 			
+			//show matching flower
+//			startActivity(new Intent(
+//	                this,
+//	                GardenActivity.class));
 			break;
 			
 		case R.id.rejectBtn:
