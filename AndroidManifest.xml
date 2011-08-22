@@ -27,11 +27,13 @@
 		<activity android:name=".ShowTakenPhoto"
 			android:label="@string/showtakenphoto_title">
 		</activity>
-<!--		<activity android:name=".GardenActivity" android:label="Flower Matching">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.img.jk.beethelion.GardenActivity"/>-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+		
+		<activity android:name=".GardenActivity"
+			android:label="Flower Matching">
+           <!-- <intent-filter>
+               <action android:name="com.img.jk.beethelion.GardenActivity"/>
+           </intent-filter> -->
+       	</activity>
 		
     </application>
 </manifest>

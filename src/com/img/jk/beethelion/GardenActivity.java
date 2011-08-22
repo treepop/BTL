@@ -72,6 +72,7 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 
         setContentView(R.layout.garden);
 
+        gbV = (GlobalVar)getApplicationContext();
         m_flowerList = (GridView) findViewById(android.R.id.list);
        m_container = (ViewGroup) findViewById(R.id.container);
        m_imageView = (ImageView) findViewById(R.id.picture);
@@ -87,7 +88,7 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
        m_dataBase = SQLiteDatabase.openDatabase(strDBPath, null, SQLiteDatabase.OPEN_READONLY|
     	       SQLiteDatabase.NO_LOCALIZED_COLLATORS); 
        
-    // How to get the flower rank.
+    // How to get the flower rank. // Hang this line.
        String strFlowerDBPath= gbV.getStrflowerPicDBDir();
        String strUnkFlowerPath = gbV.getStrBeeDir();
        //หากไม่มีข้อมูล ใน database
