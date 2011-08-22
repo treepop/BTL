@@ -109,9 +109,8 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 		{
 			strFlower=(String) iter.next();
 			//get flower id
-			flowerID = Integer.valueOf(strFlower);  
-			strFlower = strFlower.concat("_1.jpg");
-			Toast.makeText(this, strFlower.toString(), Toast.LENGTH_SHORT).show();
+			flowerID = Integer.valueOf(strFlower.substring(0, strFlower.indexOf('_')));  
+			// Toast.makeText(this, strFlower.toString(), Toast.LENGTH_SHORT).show();
 			 Cursor cursor = getFlower(flowerID); 
 		     strInfo = showEvents(cursor); 
 		     if(strInfo.length()==0)
@@ -155,8 +154,11 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
         m_container.setPersistentDrawingCache(ViewGroup.PERSISTENT_ANIMATION_CACHE);
         applyInfoRotation(-1, 180, 90);
 //		Log.d("Test","clicked on " + i);
-       
+
+        // Clear global variable for next taking photo.
+        gbV.clearAll();
     }
+    
     //-----------------------------
     //Name:getFlower
     //Desc: query flower information from database

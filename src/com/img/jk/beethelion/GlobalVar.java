@@ -16,6 +16,7 @@ public class GlobalVar extends Application {
 	private String strflowerPicDBDir;
 	private String strFNameResultMatching;
 	public Set<String> flowerRank = new LinkedHashSet<String>();
+	private Set<String> cacheFlowerRank = new LinkedHashSet<String>();
 
 	public Bitmap getBmpPhoto() {
 		return bmpPhoto;
@@ -55,6 +56,17 @@ public class GlobalVar extends Application {
 	// -------------------------------------
 	
 	public void addFlowerRank(String strFlower) {
-		flowerRank.add(strFlower.substring(0, strFlower.indexOf('_')));
+		if(!cacheFlowerRank.contains(strFlower.substring(0, strFlower.indexOf('_')))) {
+			cacheFlowerRank.add(strFlower.substring(0, strFlower.indexOf('_')));
+			flowerRank.add(strFlower);
+		}
+	}
+	
+	// -------------------------------------
+	
+	public void clearAll() {
+		bmpPhoto.recycle();
+		flowerRank.clear();
+		cacheFlowerRank.clear();
 	}
 }

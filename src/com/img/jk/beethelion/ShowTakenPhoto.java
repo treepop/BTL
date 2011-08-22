@@ -61,7 +61,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			mediaPlayerBee.stop();
 			mediaPlayerBee.release();
 			
-			Toast.makeText(this, String.format("Used time = %f sec",
+			Toast.makeText(this, String.format("ใช้เวลาหา  %.2f วินาที",
 					(timerStop - timerStart)/1000.0), Toast.LENGTH_LONG).show();
 			
 			// Read rank photo and give it to vector.
@@ -104,6 +104,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			// show matching flower
 			Intent i = new Intent(this,GardenActivity.class);
 			startActivity(i);
+			this.finish();
 //			startActivity(new Intent(
 //	                this,
 //	                GardenActivity.class));

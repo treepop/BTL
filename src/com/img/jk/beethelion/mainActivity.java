@@ -53,7 +53,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
-import android.hardware.Camera.Size;
+import android.hardware.Camera.Size; // Keep it for debuging.
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
@@ -72,6 +72,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		OnClickListener,OnCompletionListener {
 
 	private Camera x10Camera;
+	GlobalVar gbV;
 //	MediaPlayer mediaPlayerBee;
 	MediaPlayer mediaPlayerBB;
 	
@@ -92,6 +93,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         setContentView(R.layout.main);
         
         // Connect SurfaceView.
+        gbV = (GlobalVar)getApplicationContext();
         SurfaceView x10SurfaceView;
         SurfaceHolder x10SurfaceHolder;
         x10SurfaceView = (SurfaceView)findViewById(R.id.surface);
@@ -189,7 +191,6 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 				// -------------
 				
 				// Write image on global variable.
-				GlobalVar gbV = (GlobalVar)getApplicationContext();
 				gbV.setBmpPhoto(rotatedBmp);
 				
 				String fNameUnknownFlower = "unknownFlower.jpg";
@@ -282,8 +283,8 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		
 		// Set focus to macro mode.
         List<String> x10FocusMode = x10Parameters.getSupportedFocusModes();
-        if(x10FocusMode.contains(Camera.Parameters.FOCUS_MODE_MACRO))
-        	x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+        if(x10FocusMode.contains(Camera.Parameters.FOCUS_MODE_AUTO))
+        	x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
         
         // Set picture size.
         int bestWidth = 0;
@@ -363,7 +364,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         
         // For debug.
         // =========
-        x10Parameters = x10Camera.getParameters();
+        /*x10Parameters = x10Camera.getParameters();
         
         String infoFocusMode = x10Parameters.getFocusMode();
         Toast.makeText(this, "Focus = " + infoFocusMode, Toast.LENGTH_SHORT).show();
@@ -380,7 +381,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         h = infoPreviewSize.height;
         String strPreviewSize = w.toString() + " x " + h.toString();
         Toast.makeText(this, "Preview size = " + strPreviewSize, Toast.LENGTH_SHORT)
-        	.show();
+        	.show();*/
         // =========
 	}
 	
