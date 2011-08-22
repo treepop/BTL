@@ -91,6 +91,14 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 				}
 			}
 
+			// How to get the flower rank.
+			// An example code for Karn.
+			for(String strFlower:gbV.flowerRank) {
+				Integer i = Integer.valueOf(strFlower);
+				strFlower = strFlower.concat("_1.jpg");
+				Toast.makeText(this, i.toString() + "&" + strFlower.toString(),
+						Toast.LENGTH_SHORT).show();
+			}
 			
 			//show matching flower
 //			startActivity(new Intent(

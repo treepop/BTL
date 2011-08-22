@@ -55,6 +55,6 @@ public class GlobalVar extends Application {
 	// -------------------------------------
 	
 	public void addFlowerRank(String strFlower) {
-		flowerRank.add(strFlower.substring(0, strFlower.indexOf('-')));
+		flowerRank.add(strFlower.substring(0, strFlower.indexOf('_')));
 	}
 }
