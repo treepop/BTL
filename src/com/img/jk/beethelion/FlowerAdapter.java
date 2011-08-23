@@ -114,6 +114,10 @@ class FlowerAdapter extends BaseAdapter {
         text.setText(item.name);
         //image.setImageResource(item.image);
 
+        // Program will hang this line when continuous run
+        /* 08-23 23:19:57.166: ERROR/dalvikvm-heap(31182): 1228800-byte external allocation too large for this process.
+        08-23 23:19:57.166: ERROR/GraphicsJNI(31182): VM won't let us allocate 1228800 bytes */
+
         image.setImageURI(Uri.fromFile(new File(item.mUri)));  //new File("/sdcard/cats.jpg")
         //Or with
         //image.setImageURI(Uri.parse(new File(item.mUri).toString()));

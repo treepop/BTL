@@ -365,7 +365,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         
         // For debug.
         // =========
-        /*x10Parameters = x10Camera.getParameters();
+        x10Parameters = x10Camera.getParameters();
         
         String infoFocusMode = x10Parameters.getFocusMode();
         Toast.makeText(this, "Focus = " + infoFocusMode, Toast.LENGTH_SHORT).show();
@@ -382,7 +382,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         h = infoPreviewSize.height;
         String strPreviewSize = w.toString() + " x " + h.toString();
         Toast.makeText(this, "Preview size = " + strPreviewSize, Toast.LENGTH_SHORT)
-        	.show();*/
+        	.show();
         // =========
 	}
 	
