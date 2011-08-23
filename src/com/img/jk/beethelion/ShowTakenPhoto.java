@@ -48,7 +48,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			// Play sound effect click.
 			mediaPlayerBB = MediaPlayer.create(this, R.raw.blackberry);
 			mediaPlayerBB.start();
-			mediaPlayerBee = MediaPlayer.create(this, R.raw.forest_rain);
+			mediaPlayerBee = MediaPlayer.create(this, R.raw.flowerpark_midi);
 			mediaPlayerBee.setLooping(true);
 			mediaPlayerBee.start();
 			
