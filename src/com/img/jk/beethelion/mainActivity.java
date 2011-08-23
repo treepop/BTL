@@ -59,6 +59,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -440,5 +441,15 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 	public void onCompletion(MediaPlayer arg0) {
 		mediaPlayerBB.stop();
 		mediaPlayerBB.release();
+	}
+
+	// Exit program when user press back button.
+	// But application still running after exit.
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			this.finish();
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }
