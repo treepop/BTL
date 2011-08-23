@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -63,6 +64,7 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
     String m_strFlowerName; //get name from current cursor
 
     GlobalVar gbV;
+    MediaPlayer mediaPlayerFlowerPark;
 
     @Override
     protected void onCreate(final Bundle istate) {
@@ -157,6 +159,11 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 
         // Clear global variable for next taking photo.
         gbV.clearAll();
+        
+        // Play flower park song.
+        mediaPlayerFlowerPark = MediaPlayer.create(this, R.raw.flowerpark);
+        mediaPlayerFlowerPark.setLooping(true);
+        mediaPlayerFlowerPark.start();
     }
     
     //-----------------------------
@@ -322,4 +329,10 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
         }
     }
 
+	@Override
+	protected void onStop() {
+		super.onStop();
+		mediaPlayerFlowerPark.stop();
+		mediaPlayerFlowerPark.release();
+	}
 }
