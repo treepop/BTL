@@ -12,8 +12,8 @@
     <string name="about_title">เกี่ยวกับผึ้งใจสิงห์</string>
     <string name="about_text">\
 &lt;b&gt;วิธีการใช้โปรแกรมผึ้งใจสิงห์ &lt;/b&gt;
-&lt;i&gt;1&lt;/i&gt;ถ่ายรูปดอกไม้ที่ต้องการ ถ่ายเดี่ยวๆ ชัดๆ ให้เกือบเต็มจอภาพ
-&lt;i&gt;2&lt;/i&gt;โปรแกรมจะทำการค้นหาดอกไม้ที่เหมือนให้</string>
+&lt;br&gt;&lt;i&gt;1.&lt;/i&gt;ถ่ายรูปดอกไม้ที่ต้องการ ถ่ายเดี่ยวๆ ชัดๆ ให้เกือบเต็มจอภาพ
+&lt;br&gt;&lt;i&gt;2.&lt;/i&gt;โปรแกรมจะทำการค้นหาดอกไม้ที่เหมือนให้</string>
 
 <!-- default flower info -->
 <string name="flowerInfo">&lt;b&gt;ชื่อทั่วไป:&lt;/b&gt; แพงพวย&lt;br&gt;&lt;b&gt;ชื่อวิทยาศาสตร์:&lt;/b&gt;&lt;i&gt; Catharanthus roseus&lt;/i&gt;

@@ -157,8 +157,7 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
         applyInfoRotation(-1, 180, 90);
 //		Log.d("Test","clicked on " + i);
 
-        // Clear global variable for next taking photo.
-        gbV.clearAll();
+
         
         // Play flower park song.
         mediaPlayerFlowerPark = MediaPlayer.create(this, R.raw.flowerpark);
@@ -224,6 +223,9 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
     	  return true;
     	}
     }
+    // Clear global variable for next taking photo.
+    gbV.clearAll();
+    finish();
     //Pass other events along their way up the chain
     return super.onKeyDown(keyCode, event);
     }   
