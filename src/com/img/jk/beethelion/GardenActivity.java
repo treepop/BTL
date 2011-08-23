@@ -105,7 +105,7 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
         flowerAdapt = new FlowerAdapter();
         flowerAdapt.add(new FlowerItem("´Í¡ÍÐäÃ?",strUnkFlowerPath + "/unknownFlower.jpg",0,""));
         
-        int numflower = gbV.flowerRank.size()>15?15:gbV.flowerRank.size();
+        int numflower = gbV.flowerRank.size()>17?17:gbV.flowerRank.size();
 	    Iterator<String> iter=gbV.flowerRank.iterator();
 		for(int idx=0;idx<numflower;idx++)
 		{

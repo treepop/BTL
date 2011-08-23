@@ -3,7 +3,7 @@
 
 <!-- main.xml -->
     <string name="hello">Hello World, mainActivity!</string>
-    <string name="app_name">Bee the Lion</string>
+    <string name="app_name">ผึ้งใจสิงห์</string>
     
 <!-- showtakenphoto.xml -->
 	<string name="showtakenphoto_title">จะใช้รูปนี้ในการค้นหาหรือไม่ ?</string>
