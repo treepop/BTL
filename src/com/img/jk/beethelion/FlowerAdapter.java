@@ -41,6 +41,7 @@ class FlowerAdapter extends BaseAdapter {
 	public void clear()
 	{
 		m_lsFlower.clear();
+		m_lsFlower = null;
 	}
 //    private final FruitItem[] items;
 //    

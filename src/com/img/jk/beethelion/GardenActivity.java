@@ -55,7 +55,7 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
     private ViewGroup m_container;
     private LinearLayout m_flowerLayout;
     private ImageView m_imageView;
-    private FlowerAdapter flowerAdapt;
+    private FlowerAdapter m_flowerAdapt;
     private TextView m_textView;
     //database variable
     private static String[] FROM = { "name","sciname","generalInfo", };
@@ -102,8 +102,8 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 		String strFlower;
 		String strInfo;
 		// Prepare the ListView flower       
-        flowerAdapt = new FlowerAdapter();
-        flowerAdapt.add(new FlowerItem("´Í¡ÍÐäÃ?",strUnkFlowerPath + "/unknownFlower.jpg",0,""));
+		m_flowerAdapt = new FlowerAdapter();
+		m_flowerAdapt.add(new FlowerItem("´Í¡ÍÐäÃ?",strUnkFlowerPath + "/unknownFlower.jpg",0,""));
         
         int numflower = gbV.flowerRank.size()>17?17:gbV.flowerRank.size();
 	    Iterator<String> iter=gbV.flowerRank.iterator();
@@ -116,9 +116,9 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 			 Cursor cursor = getFlower(flowerID); 
 		     strInfo = showEvents(cursor); 
 		     if(strInfo.length()==0)
-		    	 flowerAdapt.add(new FlowerItem(m_strFlowerName,strFlowerDBPath+ strFlower,flowerID,strTmpInfo));
+		    	 m_flowerAdapt.add(new FlowerItem(m_strFlowerName,strFlowerDBPath+ strFlower,flowerID,strTmpInfo));
 		     else
-		    	 flowerAdapt.add(new FlowerItem(m_strFlowerName,strFlowerDBPath+ strFlower,flowerID,strInfo));
+		    	 m_flowerAdapt.add(new FlowerItem(m_strFlowerName,strFlowerDBPath+ strFlower,flowerID,strInfo));
 		      
 		}
 		
@@ -136,7 +136,7 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 //		view.setAdapter(flowerAdapt);
 //		setContentView(view);
 //
-		m_flowerList.setAdapter(flowerAdapt);
+		m_flowerList.setAdapter(m_flowerAdapt);
 		m_flowerList.setOnItemClickListener(this);
        
        // Prepare the flower information
@@ -202,9 +202,9 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
     @Override
 	public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 		// TODO Auto-generated method stub
-		String strUri = flowerAdapt.getItemUri(position);
+		String strUri = m_flowerAdapt.getItemUri(position);
 		 m_imageView.setImageURI(Uri.fromFile(new File(strUri)));  //new File("/sdcard/cats.jpg")
-		FlowerItem item  = (FlowerItem) flowerAdapt.getItem(position);
+		FlowerItem item  = (FlowerItem) m_flowerAdapt.getItem(position);
 		m_textView.setText(Html.fromHtml(item.m_info));
 		applyRotation(position, 0, 90);
 	}
@@ -225,6 +225,8 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
     }
     // Clear global variable for next taking photo.
     gbV.clearAll();
+    m_flowerAdapt.clear();
+    m_flowerAdapt = null;
     finish();
     //Pass other events along their way up the chain
     return super.onKeyDown(keyCode, event);
