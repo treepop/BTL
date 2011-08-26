@@ -51,6 +51,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Bitmap.CompressFormat;
 import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size; // Keep it for debuging.
@@ -117,7 +118,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         	
         	@Override
         	public void onClick(View v) {
-				 x10Camera.takePicture(previewCallback, rawCallback, jpegCallback);
+        		x10Camera.autoFocus(x10AutoFocusCallbackTakePhoto);
 			}
 		});
         
@@ -150,6 +151,9 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         /*This line has bug. The screen has wrong object orientation.
         This following command doesn't correct the orientation bug.
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);*/
+        
+        ImageButton atfBtn = (ImageButton)findViewById(R.id.macro);
+        atfBtn.setOnClickListener(this);
         
         ImageButton infoBtn = (ImageButton)findViewById(R.id.infoBtn);
         infoBtn.setOnClickListener(this); // If you new inner class here, it take up
@@ -284,8 +288,8 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		
 		// Set focus to macro mode.
         List<String> x10FocusMode = x10Parameters.getSupportedFocusModes();
-        if(x10FocusMode.contains(Camera.Parameters.FOCUS_MODE_AUTO))
-        	x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        if(x10FocusMode.contains(Camera.Parameters.FOCUS_MODE_MACRO))
+        	x10Parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
         
         // Set picture size.
         int bestWidth = 0;
@@ -419,6 +423,10 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 			Intent i = new Intent(this,About.class);
 			startActivity(i);
 			break;
+			
+		case R.id.macro:
+			x10Camera.autoFocus(x10AutoFocusCallback);
+			break;
 		}
 	}
 
@@ -452,4 +460,27 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+	
+	AutoFocusCallback x10AutoFocusCallback = new AutoFocusCallback() {
+		// The right way, x10AutoFocusCallback and x10AutoFocusCallbackTakePhoto
+		// should be combine together but I don't have ability to do that.
+		// It should be x10AutoFocusCallback(1 or 2) for selecting those each part.
+		@Override
+		public void onAutoFocus(boolean success, Camera camera) {
+			if(success) {
+				Toast.makeText(mainActivity.this,"ปรับละเอียด",
+						Toast.LENGTH_SHORT).show();
+			}
+		}
+	};
+	
+	AutoFocusCallback x10AutoFocusCallbackTakePhoto = new AutoFocusCallback() {
+		
+		@Override
+		public void onAutoFocus(boolean success, Camera camera) {
+			if(success) {
+				x10Camera.takePicture(previewCallback, rawCallback, jpegCallback);
+			}
+		}
+	};
 }
