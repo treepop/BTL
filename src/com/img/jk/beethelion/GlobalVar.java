@@ -12,9 +12,12 @@ import android.graphics.Bitmap;
 public class GlobalVar extends Application {
 	
 	private Bitmap bmpPhoto;
-	private String strBeeDir;
-	private String strflowerPicDBDir;
-	private String strFNameResultMatching;
+	private String strBeeDir; // Ex. /mnt/sdcard/beeTheLion/
+	private String strflowerPicDBDir; // Ex. /mnt/sdcard/beeTheLion/flowerPicDB/
+	private String strHistoryPhotoDir; // Ex. historyPhoto
+	private String strFNameResultMatching; // Ex. /mnt/sdcard/beeTheLion/Matches.txt
+	private String strUnknownFlower; // Ex. unknownFlower
+	private String strRunningNumberFile; // Ex. runningNumber.txt
 	public Set<String> flowerRank = new LinkedHashSet<String>();
 	private Set<String> cacheFlowerRank = new LinkedHashSet<String>();
 
@@ -68,5 +71,35 @@ public class GlobalVar extends Application {
 		bmpPhoto.recycle();
 		flowerRank.clear();
 		cacheFlowerRank.clear();
+	}
+	
+	// -------------------------------------
+
+	public String getStrHistoryPhotoDir() {
+		return strHistoryPhotoDir;
+	}
+
+	public void setStrHistoryPhotoDir(String strHistoryPhotoDir) {
+		this.strHistoryPhotoDir = strHistoryPhotoDir;
+	}
+
+	// -------------------------------------
+	
+	public String getStrUnknownFlower() {
+		return strUnknownFlower;
+	}
+
+	public void setStrUnknownFlower(String strUnknownFlower) {
+		this.strUnknownFlower = strUnknownFlower;
+	}
+	
+	// -------------------------------------
+
+	public String getStrRunningNumberFile() {
+		return strRunningNumberFile;
+	}
+
+	public void setStrRunningNumberFile(String strRunningNumberFile) {
+		this.strRunningNumberFile = strRunningNumberFile;
 	}
 }

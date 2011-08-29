@@ -1,18 +1,25 @@
 package com.img.jk.beethelion;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -52,6 +59,8 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			mediaPlayerBee.setLooping(true);
 			mediaPlayerBee.start();
 			
+			saveHistoryPhoto();
+			
 			Toast.makeText(this, "Call matching module.", Toast.LENGTH_SHORT).show();
 			long timerStart,timerStop;
 			timerStart = System.currentTimeMillis();
@@ -87,6 +96,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 				if(br != null)
 				try {
 					br.close();
+					br = null;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -130,5 +140,147 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			mediaPlayerBB.stop();
 			mediaPlayerBB.release();
 //		}		
+	}
+	
+	private void saveHistoryPhoto() {
+	// Save flower photo for research further.
+		// Obtain running number for naming UNKNOWN_FLOWER.
+		// For instance, unknownFlower0001.jpg.
+		// ================================================
+		File runningNumFile = new File(gbV.getStrBeeDir() +
+				gbV.getStrRunningNumberFile());
+		Integer runningNum = 0;
+		if(runningNumFile.exists()) {
+			// Read running number then increase its value with 1.
+			// Finally write it back.
+			FileReader fr = null;
+			try {
+				fr = new FileReader(runningNumFile);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			BufferedReader br = new BufferedReader(fr);
+			String line;
+			try {
+				line = br.readLine();
+				runningNum = Integer.valueOf(line);
+				runningNum++;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			finally {
+				if(br != null)
+				try {
+					br.close();
+					br = null;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			// After increase its value with 1 then write it back.
+			try {
+				runningNumFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if(runningNumFile.exists() &&
+					runningNumFile.canWrite()) {
+				FileWriter fw = null;
+				try {
+					fw = new FileWriter(runningNumFile);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				BufferedWriter bw = new BufferedWriter(fw);
+				try {
+					bw.write(runningNum.toString());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				finally {
+					if(bw != null)
+					try {
+						bw.flush();
+						bw.close();
+						bw = null;
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		} else {
+			try {
+				runningNumFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if(runningNumFile.exists() &&
+					runningNumFile.canWrite()) {
+				FileWriter fw = null;
+				try {
+					fw = new FileWriter(runningNumFile);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				BufferedWriter bw = new BufferedWriter(fw);
+				try {
+					runningNum++;
+					bw.write(runningNum.toString());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				finally {
+					if(bw != null)
+					try {
+						bw.flush();
+						bw.close();
+						bw = null;
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		// ================================================
+		
+		// Write unknownFlower0001.jpg for keeping it permanently.
+		File historyDir = new File(gbV.getStrBeeDir() + gbV.getStrHistoryPhotoDir());
+		if(!historyDir.exists()) {
+			historyDir.mkdir();
+		}
+		File fileUnknownFlowerNum = new File(
+				historyDir.getAbsolutePath() + "/" + gbV.getStrUnknownFlower() +
+				String.format("%04d", runningNum) + ".jpg");
+		try {
+			fileUnknownFlowerNum.createNewFile();
+		} catch(IOException e) {
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+			Log.e("jkError", e.getMessage());
+		}
+		if(fileUnknownFlowerNum.exists() && fileUnknownFlowerNum.canWrite()) {
+			BufferedOutputStream fosNum = null;
+			try {
+				fosNum = new BufferedOutputStream(
+						new FileOutputStream(fileUnknownFlowerNum));
+				Bitmap rotatedBmp = gbV.getBmpPhoto();
+				rotatedBmp.compress(CompressFormat.JPEG, 100, fosNum);
+				rotatedBmp.recycle();
+				rotatedBmp = null;
+			} catch(FileNotFoundException e) {
+				Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+				Log.e("jkError", e.getMessage());
+			} finally {
+				if(fosNum != null) {
+					try {
+						fosNum.flush();
+						fosNum.close();
+						fosNum = null;
+					} catch (IOException e) {
+						Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+						Log.e("jkError", e.getMessage());
+					}
+				}
+			}
+		}
 	}
 }

@@ -45,16 +45,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Bitmap.CompressFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
-import android.hardware.Camera.Size; // Keep it for debuging.
+import android.hardware.Camera.Size;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
@@ -73,17 +73,22 @@ import android.widget.Toast;
 public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		OnClickListener,OnCompletionListener {
 
-	private Camera x10Camera;
+	// Equal to #define in C++
+	// =======================
+	private static final String UNKNOWN_FLOWER = "unknownFlower";
+	private static final String RUNNING_NUMBER_FILE = "runningNumber.txt";
+	private static final String DIR_OF_PROGRAM = "beeTheLion";
+	private static final String DIR_OF_HISTORY_PHOTO = "historyPhoto";
+	public static final int LARGEST_WIDTH = 800;
+	public static final int LARGEST_HEIGHT = 600;
+	
 	GlobalVar gbV;
+	private Camera x10Camera;
 //	MediaPlayer mediaPlayerBee;
 	MediaPlayer mediaPlayerBB;
 	
 	/*private boolean mPreviewRunning = false;
-	private Button macroBtn;
 	private boolean inMacro = false;*/
-	
-	public static final int LARGEST_WIDTH = 800;
-	public static final int LARGEST_HEIGHT = 600;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -95,7 +100,6 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         setContentView(R.layout.main);
         
         // Connect SurfaceView.
-        gbV = (GlobalVar)getApplicationContext();
         SurfaceView x10SurfaceView;
         SurfaceHolder x10SurfaceHolder;
         x10SurfaceView = (SurfaceView)findViewById(R.id.surface);
@@ -111,6 +115,9 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         		new LayoutParams(LayoutParams.FILL_PARENT,
         				LayoutParams.FILL_PARENT));
         
+        ImageButton atfBtn = (ImageButton)findViewById(R.id.macro);
+        atfBtn.setOnClickListener(this);
+        
         // Connect take picture button.
         ImageButton takePictureBtn;
         takePictureBtn = (ImageButton)findViewById(R.id.cameraBtn);
@@ -121,6 +128,10 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         		x10Camera.autoFocus(x10AutoFocusCallbackTakePhoto);
 			}
 		});
+        
+        ImageButton infoBtn = (ImageButton)findViewById(R.id.infoBtn);
+        infoBtn.setOnClickListener(this); // If you new inner class here, it take up
+        	// an extra 1KB of memory.
         
         // Connect macro button.
         /*macroBtn = (Button)findViewById(R.id.macroBtn);
@@ -152,12 +163,11 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         This following command doesn't correct the orientation bug.
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);*/
         
-        ImageButton atfBtn = (ImageButton)findViewById(R.id.macro);
-        atfBtn.setOnClickListener(this);
-        
-        ImageButton infoBtn = (ImageButton)findViewById(R.id.infoBtn);
-        infoBtn.setOnClickListener(this); // If you new inner class here, it take up
-        	// an extra 1KB of memory.
+        // Create global variable.
+        gbV = (GlobalVar)getApplicationContext();
+        gbV.setStrUnknownFlower(UNKNOWN_FLOWER);
+        gbV.setStrRunningNumberFile(RUNNING_NUMBER_FILE);
+        gbV.setStrHistoryPhotoDir(DIR_OF_HISTORY_PHOTO);
     } // End onCreate.
     
     ShutterCallback previewCallback = new ShutterCallback() {
@@ -198,19 +208,21 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 				// Write image on global variable.
 				gbV.setBmpPhoto(rotatedBmp);
 				
-				String fNameUnknownFlower = "unknownFlower.jpg";
+				String fNameUnknownFlower = UNKNOWN_FLOWER + ".jpg";
 				File sdDir = Environment.getExternalStorageDirectory();
 				if(sdDir.exists()) {
 					if(sdDir.canWrite()) {
-						File beeDir = new File(sdDir.getAbsolutePath()+"/beeTheLion");
+						File beeDir = new File(sdDir.getAbsolutePath() + "/" + 
+								DIR_OF_PROGRAM);
 						if(!beeDir.exists()) {
 							beeDir.mkdir();
 						}
 						// Keep beeDir on global variable.
 						gbV.setStrBeeDir(beeDir.getAbsolutePath() + "/");
 						if(beeDir.exists() && beeDir.canWrite()) {
-							File fileUnknownFlower = new File(beeDir.getAbsolutePath()+
-									"/"+fNameUnknownFlower);
+							// Write unknownFlower.jpg for used in searching.
+							File fileUnknownFlower = new File(beeDir.getAbsolutePath() +
+									"/" + fNameUnknownFlower);
 							try {
 								fileUnknownFlower.createNewFile();
 							} catch(IOException e) {
@@ -221,7 +233,6 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 							}
 							if(fileUnknownFlower.exists() &&
 									fileUnknownFlower.canWrite()) {
-								// FileOutputStream fos = null;
 								BufferedOutputStream fos = null;
 								try {
 									fos = new BufferedOutputStream(
@@ -238,6 +249,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 										try {
 											fos.flush();
 											fos.close();
+											fos = null;
 										} catch (IOException e) {
 											Toast.makeText(mainActivity.this,
 													e.getMessage(),
@@ -260,6 +272,16 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 							Toast.LENGTH_LONG).show();
 					Log.e("jkERROR", "SD CARD not found!");
 				}
+				// Free variable.
+				matrix = null;
+				paint = null;
+				canvas = null;
+				// rotatedBmp.recycle(); // Enable this cause to "Canvas: trying to
+										 // use a recycled bitmap". I can't solve it.
+				// rotatedBmp = null;
+				bmp.recycle();
+				bmp = null;
+				
 				done();
 			}
 		}
