@@ -64,7 +64,12 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			Toast.makeText(this, "Call matching module.", Toast.LENGTH_SHORT).show();
 			long timerStart,timerStop;
 			timerStart = System.currentTimeMillis();
-			gbV.setStrFNameResultMatching(MatchingLib.jkMatching(gbV.getStrBeeDir()));
+			MatchingLib.jkMatching(gbV.getStrBeeDir());
+			// gbV.setStrFNameResultMatching(MatchingLib.jkMatching(gbV.getStrBeeDir()));
+//			gbV.setStrFNameResultMatching(resultFromJNI.matchesPath);
+			gbV.setStrFNameResultMatching(MatchingLib.matchesPath);
+			Toast.makeText(this, String.valueOf(MatchingLib.numVec),
+					Toast.LENGTH_SHORT).show();
 			timerStop = System.currentTimeMillis();
 			
 			mediaPlayerBee.stop();

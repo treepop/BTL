@@ -21,7 +21,9 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#ifndef _USE_ON_ANDROID
 #include <ctime>
+#endif
 
 // OpenCV header.
 // ==============
@@ -49,13 +51,19 @@ struct disStruct
 	float distance;
 };
 
+struct outPutStruct
+{
+	string matchesPath;
+	int numVec;
+} outPut;
+
 ofstream outFile; // Use together with function ShowResult.
 
 bool worseThan(const disStruct & r1,const disStruct & r2);
 void ShowResult(const disStruct & rr);
 
 #ifdef _USE_ON_ANDROID
-JNIEXPORT jstring JNICALL Java_com_img_jk_beethelion_MatchingLib_jkMatching
+JNIEXPORT void JNICALL Java_com_img_jk_beethelion_MatchingLib_jkMatching
 	(JNIEnv *env, jclass obj, jstring jStrRootProgram)
 #else
 int main(int argc, char *argv[])
@@ -79,11 +87,11 @@ int main(int argc, char *argv[])
 		strRootProgram = argv[1];
 		strRootProgram += "/";
 	}
-#endif
-	
+
 	// Timer start.
 	clock_t tmStart = clock();
-		
+#endif
+
 	// In android edit these strings.
 	// You can write either flowerPicDB\\ or flowerPicDB/ if it ran on windows.
 	// But you must write flowerPicDB/ if you ran on Android.
@@ -111,11 +119,18 @@ int main(int argc, char *argv[])
 	surf.detect(imgUnknownFlower,keypointOfUnknownFlower);
 	surfDesc.compute(imgUnknownFlower,keypointOfUnknownFlower,descriptorOfUnknowFlower);
 
+	// For debug.
+	outPut.numVec = descriptorOfUnknowFlower.rows;
+
 	// Find number of photos.
 	// ======================
 	inFile.open(strFNameFlowerDB.c_str());
 #ifndef _USE_ON_ANDROID
-	if(!inFile.is_open()) cout << "Can't open file " << strFNameFlowerDB;
+	if(!inFile.is_open())
+	{
+		cout << "Can't open file " << strFNameFlowerDB << endl;
+		exit(EXIT_FAILURE);
+	}
 #endif
 	while(inFile >> strFNameFlower)
 	{
@@ -143,7 +158,11 @@ int main(int argc, char *argv[])
 	count = 0;
 	inFile.open(strFNameFlowerDB.c_str());
 #ifndef _USE_ON_ANDROID
-	if(!inFile.is_open()) cout << "Can't open file " << strFNameFlowerDB;
+	if(!inFile.is_open())
+	{
+		cout << "Can't open file " << strFNameFlowerDB << endl;
+		exit(EXIT_FAILURE);
+	}
 #endif
 	while(inFile >> strFNameFlower)
 	{
@@ -157,7 +176,11 @@ int main(int argc, char *argv[])
 #endif
 		inDescFile.open(strDirDescriptionDB + strFNameDesc,FileStorage::READ);
 #ifndef _USE_ON_ANDROID
-		if(!inDescFile.isOpened()) cout << "Can't open file " << strFNameDesc;
+		if(!inDescFile.isOpened())
+		{
+			cout << "Can't open file " << strFNameDesc << endl;
+			exit(EXIT_FAILURE);
+		}
 #endif
 		inDescFile["descriptionOfPic"] >> descriptorDB[count];
 		inDescFile.release();
@@ -191,20 +214,49 @@ int main(int argc, char *argv[])
 	strRootProgram += "Matches.txt";
 	outFile.open(strRootProgram.c_str());
 #ifndef _USE_ON_ANDROID
-	if(!outFile.is_open()) cout << "Can't open file " << "Matches.txt";
+	if(!outFile.is_open())
+	{
+		cout << "Can't open file " << "Matches.txt" << endl;
+		exit(EXIT_FAILURE);
+	}
 #endif
 	for_each(similarity.begin(),similarity.end(),ShowResult);
 	outFile.close();
 
+#ifndef _USE_ON_ANDROID
 	// Timer stop.
 	clock_t tmStop = clock();
-#ifndef _USE_ON_ANDROID
 	cout << endl << "Total using time = " << (tmStop - tmStart)/CLOCKS_PER_SEC
-		<< " sec" << endl << "Pass enter to exit.";
+		<< " sec" << endl;
+	cout << "Number of vector = " << outPut.numVec << endl;
+	cout << "Pass enter to exit.";
 #endif
 
 #ifdef _USE_ON_ANDROID
-	return env->NewStringUTF(strRootProgram.c_str());
+	outPut.matchesPath = strRootProgram;
+	// (JNIEnv *env, jclass obj, jstring jStrRootProgram)
+	// return env->NewStringUTF(strRootProgram.c_str());
+	
+	// Get the class.
+	// jclass class_MatchingLib = env->GetObjectClass(env,obj);
+	jclass class_MatchingLib = env->FindClass("com/img/jk/beethelion/MatchingLib");
+	//jclass class_MatchingLib = env->FindClass("MatchingLib");
+
+	// Get the field id.
+	jfieldID id_matchesPath = env->GetFieldID(class_MatchingLib,"matchesPath","Ljava/lang/String;");
+	jfieldID id_numVec = env->GetFieldID(class_MatchingLib,"numVec","I");
+	/*String matchesPath;
+	int numVec;*/
+
+	// Set the data value to the field.
+	jstring jStr = env->NewStringUTF(outPut.matchesPath.c_str());
+	env->SetStaticObjectField(class_MatchingLib,id_matchesPath,jStr);
+	env->SetIntField(class_MatchingLib,id_numVec,outPut.numVec);
+	//env->SetIntField(class_MatchingLib,id_numVec,outPut.numVec);
+	
+	/*env->SetStringField(env,jobject,fid1,outPut.matchesPath);
+	env->SetIntField(env,jobject,fid2,outPut.numVec);*/
+	return;
 #else
 	getchar();
 	return 0;

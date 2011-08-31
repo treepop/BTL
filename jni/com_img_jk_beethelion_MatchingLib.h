@@ -10,9 +10,9 @@ extern "C" {
 /*
  * Class:     com_img_jk_beethelion_MatchingLib
  * Method:    jkMatching
- * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT jstring JNICALL Java_com_img_jk_beethelion_MatchingLib_jkMatching
+JNIEXPORT void JNICALL Java_com_img_jk_beethelion_MatchingLib_jkMatching
   (JNIEnv *, jclass, jstring);
 
 #ifdef __cplusplus
