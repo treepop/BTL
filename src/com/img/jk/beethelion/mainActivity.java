@@ -447,6 +447,9 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 			break;
 			
 		case R.id.macro:
+			// Play sound effect click.
+			mediaPlayerBB = MediaPlayer.create(this, R.raw.blackberry);
+			mediaPlayerBB.start();
 			x10Camera.autoFocus(x10AutoFocusCallback);
 			break;
 		}

@@ -234,29 +234,18 @@ int main(int argc, char *argv[])
 
 #ifdef _USE_ON_ANDROID
 	outPut.matchesPath = strRootProgram;
-	// (JNIEnv *env, jclass obj, jstring jStrRootProgram)
-	// return env->NewStringUTF(strRootProgram.c_str());
 	
 	// Get the class.
-	// jclass class_MatchingLib = env->GetObjectClass(env,obj);
 	jclass class_MatchingLib = env->FindClass("com/img/jk/beethelion/MatchingLib");
-	//jclass class_MatchingLib = env->FindClass("MatchingLib");
-
+	
 	// Get the field id.
-	jfieldID id_matchesPath = env->GetFieldID(class_MatchingLib,"matchesPath","Ljava/lang/String;");
-	jfieldID id_numVec = env->GetFieldID(class_MatchingLib,"numVec","I");
-	/*String matchesPath;
-	int numVec;*/
+	jfieldID id_matchesPath = env->GetStaticFieldID(class_MatchingLib,"matchesPath","Ljava/lang/String;");
+	jfieldID id_numVec = env->GetStaticFieldID(class_MatchingLib,"numVec","I");
 
 	// Set the data value to the field.
 	jstring jStr = env->NewStringUTF(outPut.matchesPath.c_str());
 	env->SetStaticObjectField(class_MatchingLib,id_matchesPath,jStr);
-	env->SetIntField(class_MatchingLib,id_numVec,outPut.numVec);
-	//env->SetIntField(class_MatchingLib,id_numVec,outPut.numVec);
-	
-	/*env->SetStringField(env,jobject,fid1,outPut.matchesPath);
-	env->SetIntField(env,jobject,fid2,outPut.numVec);*/
-	return;
+	env->SetStaticIntField(class_MatchingLib,id_numVec,outPut.numVec);
 #else
 	getchar();
 	return 0;

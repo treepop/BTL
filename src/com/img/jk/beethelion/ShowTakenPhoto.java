@@ -65,16 +65,14 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			long timerStart,timerStop;
 			timerStart = System.currentTimeMillis();
 			MatchingLib.jkMatching(gbV.getStrBeeDir());
-			// gbV.setStrFNameResultMatching(MatchingLib.jkMatching(gbV.getStrBeeDir()));
-//			gbV.setStrFNameResultMatching(resultFromJNI.matchesPath);
-			gbV.setStrFNameResultMatching(MatchingLib.matchesPath);
-			Toast.makeText(this, String.valueOf(MatchingLib.numVec),
-					Toast.LENGTH_SHORT).show();
 			timerStop = System.currentTimeMillis();
+			gbV.setStrFNameResultMatching(MatchingLib.matchesPath);
 			
 			mediaPlayerBee.stop();
 			mediaPlayerBee.release();
 			
+			Toast.makeText(this, String.format("จำนวน vector = %d", MatchingLib.numVec),
+					Toast.LENGTH_SHORT).show();
 			Toast.makeText(this, String.format("ใช้เวลาหา  %.2f วินาที",
 					(timerStop - timerStart)/1000.0), Toast.LENGTH_LONG).show();
 			
