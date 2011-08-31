@@ -89,4 +89,9 @@ public class Rotate3dAnimation extends Animation {
         matrix.preTranslate(-centerX, -centerY);
         matrix.postTranslate(centerX, centerY);
     }
+    @Override
+    protected void finalize () 
+    {
+        mCamera = null;
+    }
 }
