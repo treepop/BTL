@@ -15,6 +15,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -123,16 +125,7 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 		}
 		
 		 m_dataBase.close();
-		 
-       
-
-       		
-    	       
-    	           
-       
-       
-        
-      
+		         
 //		view.setAdapter(flowerAdapt);
 //		setContentView(view);
 //
@@ -156,15 +149,39 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
         m_container.setPersistentDrawingCache(ViewGroup.PERSISTENT_ANIMATION_CACHE);
         applyInfoRotation(-1, 180, 90);
 //		Log.d("Test","clicked on " + i);
-
-
-        
+       
         // Play flower park song.
         mediaPlayerFlowerPark = MediaPlayer.create(this, R.raw.flowerpark);
         mediaPlayerFlowerPark.setLooping(true);
         mediaPlayerFlowerPark.start();
     }
     
+    @Override
+    protected void onDestroy()
+    {
+        Log.e("JK","onDestoy  GardenActivity start");
+        //start to destroy bitmap in Grid Adapter
+        //first need to get viewgroup. 2 get id image from such viewgroup
+        //3 get Drawable from imageview and recycle;
+    	 int idx;
+    	 for(idx=0;idx<m_flowerList.getCount();idx++)
+    	 {
+    	 ViewGroup myview = (ViewGroup) m_flowerAdapt.getView(idx,m_flowerList.getChildAt(idx), m_flowerList);
+    	 final ImageView image = ((ImageView)myview.findViewById(R.id.icon));
+    	
+	         Drawable toRecycle= image.getDrawable(); 
+	         if (toRecycle != null) 
+	         {     
+	         	((BitmapDrawable)image.getDrawable()).getBitmap().recycle(); 
+	         } 
+    	 }
+        
+       	 m_flowerAdapt.clear();
+    	 m_flowerAdapt = null;
+ 
+    	 Log.e("JK","onDestoy  GardenActivity end");
+    	 super.onDestroy();
+    }
     //-----------------------------
     //Name:getFlower
     //Desc: query flower information from database
@@ -203,6 +220,12 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 	public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		String strUri = m_flowerAdapt.getItemUri(position);
+		
+         Drawable toRecycle= m_imageView.getDrawable(); 
+         if (toRecycle != null) 
+         {     
+         	((BitmapDrawable)m_imageView.getDrawable()).getBitmap().recycle(); 
+         } 
 		 m_imageView.setImageURI(Uri.fromFile(new File(strUri)));  //new File("/sdcard/cats.jpg")
 		FlowerItem item  = (FlowerItem) m_flowerAdapt.getItem(position);
 		m_textView.setText(Html.fromHtml(item.m_info));
@@ -225,8 +248,6 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
     }
     // Clear global variable for next taking photo.
     gbV.clearAll();
-    m_flowerAdapt.clear();
-    m_flowerAdapt = null;
     finish();
     //Pass other events along their way up the chain
     return super.onKeyDown(keyCode, event);

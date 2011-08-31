@@ -6,6 +6,7 @@ package com.img.jk.beethelion;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -40,6 +41,13 @@ class FlowerAdapter extends BaseAdapter {
 	}
 	public void clear()
 	{
+		FlowerItem items;
+		Iterator<FlowerItem> iter = m_lsFlower.iterator();
+		while(iter.hasNext())
+		{
+			 items = iter.next();
+			 items = null;
+		}
 		m_lsFlower.clear();
 		m_lsFlower = null;
 	}
