@@ -219,17 +219,18 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
     @Override
 	public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 		// TODO Auto-generated method stub
-		String strUri = m_flowerAdapt.getItemUri(position);
 		
-         Drawable toRecycle= m_imageView.getDrawable(); 
-         if (toRecycle != null) 
-         {     
-         	((BitmapDrawable)m_imageView.getDrawable()).getBitmap().recycle(); 
-         } 
+//         Drawable toRecycle= m_imageView.getDrawable(); 
+//         if (toRecycle != null) 
+//         {     
+//         	((BitmapDrawable)m_imageView.getDrawable()).getBitmap().recycle(); 
+//         } 
+         String strUri = m_flowerAdapt.getItemUri(position); 		
 		 m_imageView.setImageURI(Uri.fromFile(new File(strUri)));  //new File("/sdcard/cats.jpg")
 		FlowerItem item  = (FlowerItem) m_flowerAdapt.getItem(position);
 		m_textView.setText(Html.fromHtml(item.m_info));
 		applyRotation(position, 0, 90);
+		//return true;
 	}
     @Override
 	public void onClick(View v) {

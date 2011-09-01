@@ -11,6 +11,8 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -127,7 +129,7 @@ class FlowerAdapter extends BaseAdapter {
         /* 08-23 23:19:57.166: ERROR/dalvikvm-heap(31182): 1228800-byte external allocation too large for this process.
         08-23 23:19:57.166: ERROR/GraphicsJNI(31182): VM won't let us allocate 1228800 bytes */
 
-        image.setImageURI(Uri.fromFile(new File(item.mUri)));  //new File("/sdcard/cats.jpg")
+         image.setImageURI(Uri.fromFile(new File(item.mUri)));  //new File("/sdcard/cats.jpg")
         //Or with
         //image.setImageURI(Uri.parse(new File(item.mUri).toString()));
         
