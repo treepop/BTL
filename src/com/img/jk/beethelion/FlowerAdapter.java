@@ -11,7 +11,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
@@ -122,14 +121,23 @@ class FlowerAdapter extends BaseAdapter {
         }
         Log.e("karnx",item.name.toString() + " " + index);
         
-        text.setText(item.name);
+        CharSequence strSeq =text.getText();
+        if(strSeq.length()== 0)
+        	text.setText(item.name);
         //image.setImageResource(item.image);
 
         // Program will hang this line when continuous run
         /* 08-23 23:19:57.166: ERROR/dalvikvm-heap(31182): 1228800-byte external allocation too large for this process.
         08-23 23:19:57.166: ERROR/GraphicsJNI(31182): VM won't let us allocate 1228800 bytes */
 
-         image.setImageURI(Uri.fromFile(new File(item.mUri)));  //new File("/sdcard/cats.jpg")
+        //        Drawable toRecycle= image.getDrawable(); 
+//        if (toRecycle == null) 
+//        {     
+//        	//((BitmapDrawable)image.getDrawable()).getBitmap().recycle();
+//        	image.setImageURI(Uri.fromFile(new File(item.mUri)));  //new File("/sdcard/cats.jpg")
+//        } 
+  
+        image.setImageURI(Uri.fromFile(new File(item.mUri)));  //new File("/sdcard/cats.jpg")
         //Or with
         //image.setImageURI(Uri.parse(new File(item.mUri).toString()));
         

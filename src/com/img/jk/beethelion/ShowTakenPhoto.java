@@ -16,6 +16,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
@@ -32,16 +34,17 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 	GlobalVar gbV;
 	MediaPlayer mediaPlayerBB;
 	MediaPlayer mediaPlayerBee;
-	
+	private ImageView m_takenPhotoView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.showtakenphoto);
 		
+		
 		// Connect all objects in layout.
-		ImageView takenPhotoView = (ImageView)findViewById(R.id.takenPhotoView);
+		m_takenPhotoView = (ImageView)findViewById(R.id.takenPhotoView);
 		gbV = (GlobalVar)getApplicationContext();
-		takenPhotoView.setImageBitmap(gbV.getBmpPhoto());
+		m_takenPhotoView.setImageBitmap(gbV.getBmpPhoto());
 		ImageButton acceptBtn = (ImageButton)findViewById(R.id.acceptBtn);
 		acceptBtn.setOnClickListener(this);
 		ImageButton rejectBtn = (ImageButton)findViewById(R.id.rejectBtn);
@@ -117,6 +120,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			// show matching flower
 			Intent i = new Intent(this,GardenActivity.class);
 			startActivity(i);
+			
 			this.finish();
 //			startActivity(new Intent(
 //	                this,
@@ -134,6 +138,11 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 		default:
 			break;
 		}
+		Drawable toRecycle= m_takenPhotoView.getDrawable(); 
+        if (toRecycle != null) 
+        {     
+        	((BitmapDrawable)m_takenPhotoView.getDrawable()).getBitmap().recycle(); 
+        } 
 	}
 
 	@Override

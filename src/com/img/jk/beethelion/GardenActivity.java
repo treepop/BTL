@@ -10,11 +10,8 @@ import java.util.Iterator;
 
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -24,11 +21,9 @@ import android.os.Environment;
 import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -37,11 +32,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * <p>
@@ -64,9 +56,10 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
     public static final String TABLE_NAME = "FlowerInfo";
     private SQLiteDatabase m_dataBase;
     String m_strFlowerName; //get name from current cursor
-
+    private int m_prePosition;
+    
     GlobalVar gbV;
-    MediaPlayer mediaPlayerFlowerPark;
+    MediaPlayer m_mediaPlayerFlowerPark;
 
     @Override
     protected void onCreate(final Bundle istate) {
@@ -76,6 +69,8 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 
         setContentView(R.layout.garden);
 
+        //initail position click
+        m_prePosition = -1;
         gbV = (GlobalVar)getApplicationContext();
         m_flowerList = (GridView) findViewById(android.R.id.list);
        m_container = (ViewGroup) findViewById(R.id.container);
@@ -138,11 +133,7 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
         //m_flowerLayout.setFocusableInTouchMode(true);
         m_flowerLayout.setOnClickListener(this);
        
-//        m_textView.setClickable(false);
-//       m_textView.setFocusable(false);
-//       m_textView.setFocusableInTouchMode(false);       
-//        m_textView.setOnClickListener(this);
-        
+      
         // Since we are caching large views, we want to keep their cache
         // between each animation
         
@@ -151,9 +142,9 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 //		Log.d("Test","clicked on " + i);
        
         // Play flower park song.
-        mediaPlayerFlowerPark = MediaPlayer.create(this, R.raw.flowerpark);
-        mediaPlayerFlowerPark.setLooping(true);
-        mediaPlayerFlowerPark.start();
+        m_mediaPlayerFlowerPark = MediaPlayer.create(this, R.raw.flowerpark);
+        m_mediaPlayerFlowerPark.setLooping(true);
+        m_mediaPlayerFlowerPark.start();
     }
     
     @Override
@@ -178,7 +169,14 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
         
        	 m_flowerAdapt.clear();
     	 m_flowerAdapt = null;
- 
+    	 Drawable toRecycle= m_imageView.getDrawable(); 
+         if (toRecycle != null) 
+         {     
+         	((BitmapDrawable)m_imageView.getDrawable()).getBitmap().recycle(); 
+         } 
+    	 
+    	 m_mediaPlayerFlowerPark.stop();
+ 		m_mediaPlayerFlowerPark.release();
     	 Log.e("JK","onDestoy  GardenActivity end");
     	 super.onDestroy();
     }
@@ -219,17 +217,24 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
     @Override
 	public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 		// TODO Auto-generated method stub
-		
-//         Drawable toRecycle= m_imageView.getDrawable(); 
-//         if (toRecycle != null) 
-//         {     
-//         	((BitmapDrawable)m_imageView.getDrawable()).getBitmap().recycle(); 
-//         } 
-         String strUri = m_flowerAdapt.getItemUri(position); 		
-		 m_imageView.setImageURI(Uri.fromFile(new File(strUri)));  //new File("/sdcard/cats.jpg")
-		FlowerItem item  = (FlowerItem) m_flowerAdapt.getItem(position);
-		m_textView.setText(Html.fromHtml(item.m_info));
-		applyRotation(position, 0, 90);
+		if(position != 0  )
+		{
+			if( m_prePosition != position)
+			{
+	         Drawable toRecycle= m_imageView.getDrawable(); 
+	         if (toRecycle != null) 
+	         {     
+	         	((BitmapDrawable)m_imageView.getDrawable()).getBitmap().recycle(); 
+	         } 
+	         String strUri = m_flowerAdapt.getItemUri(position); 
+	         Log.e("itemclick","file path:"+ strUri);
+			 m_imageView.setImageURI(Uri.fromFile(new File(strUri)));  //new File("/sdcard/cats.jpg")
+			FlowerItem item  = (FlowerItem) m_flowerAdapt.getItem(position);
+			m_textView.setText(Html.fromHtml(item.m_info));
+			}
+			applyRotation(position, 0, 90);
+		}
+		m_prePosition = position;
 		//return true;
 	}
     @Override
@@ -358,7 +363,13 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		mediaPlayerFlowerPark.stop();
-		mediaPlayerFlowerPark.release();
+		m_mediaPlayerFlowerPark.pause();//.stop();
+		//m_mediaPlayerFlowerPark.release();
+	}
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		m_mediaPlayerFlowerPark.start();
+		
 	}
 }
