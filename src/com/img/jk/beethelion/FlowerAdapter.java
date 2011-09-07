@@ -4,15 +4,12 @@
  */
 package com.img.jk.beethelion;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,10 +28,9 @@ import android.widget.TextView;
  */
 class FlowerAdapter extends BaseAdapter {
 	private List<FlowerItem> m_lsFlower;
-	
 	FlowerAdapter()
 	{
-	  m_lsFlower = new ArrayList<FlowerItem>();	  
+	  m_lsFlower = new ArrayList<FlowerItem>();
 	}
 	public void add(FlowerItem items)
 	{
@@ -47,6 +43,7 @@ class FlowerAdapter extends BaseAdapter {
 		while(iter.hasNext())
 		{
 			 items = iter.next();
+			 items.m_bmp.recycle();
 			 items = null;
 		}
 		m_lsFlower.clear();
@@ -89,10 +86,10 @@ class FlowerAdapter extends BaseAdapter {
     public long getItemId(final int index) {
         return index;
     }
-    public String getItemUri(final int index) {
-    	final FlowerItem item = m_lsFlower.get(index);
-        return item.mUri;
-    }
+//    public Bitmap getItemBmp(final int index) {
+//    	final FlowerItem item = m_lsFlower.get(index);
+//        return item.m_bmp;       
+//    }
     
     public View getView(
             final int index,
@@ -105,12 +102,15 @@ class FlowerAdapter extends BaseAdapter {
         final TextView text = ((TextView)view.findViewById(R.id.text));
         final ImageView image = ((ImageView)view.findViewById(R.id.icon));
 
-        
-        //if((item.name.toString().compareTo("¥Õ°Õ–‰√?")== 0) && (item.mUri.toString().indexOf("apple.jpg") != -1))
+        image.setImageBitmap(item.m_bmp);
+  
+        //image.setImageURI(Uri.fromFile(new File(item.mUri)));  //new File("/sdcard/cats.jpg")
+        //Or with
+        //image.setImageURI(Uri.parse(new File(item.mUri).toString()));
+       
         if(index == 0)
         {
-        	Log.e("karn",item.name.toString() + " " + index);
-        	view.setBackgroundColor(Color.GREEN);
+         	view.setBackgroundColor(Color.GREEN);
         	text.setTextColor(Color.BLACK);
         }
         else
@@ -124,23 +124,6 @@ class FlowerAdapter extends BaseAdapter {
         CharSequence strSeq =text.getText();
         if(strSeq.length()== 0)
         	text.setText(item.name);
-        //image.setImageResource(item.image);
-
-        // Program will hang this line when continuous run
-        /* 08-23 23:19:57.166: ERROR/dalvikvm-heap(31182): 1228800-byte external allocation too large for this process.
-        08-23 23:19:57.166: ERROR/GraphicsJNI(31182): VM won't let us allocate 1228800 bytes */
-
-        //        Drawable toRecycle= image.getDrawable(); 
-//        if (toRecycle == null) 
-//        {     
-//        	//((BitmapDrawable)image.getDrawable()).getBitmap().recycle();
-//        	image.setImageURI(Uri.fromFile(new File(item.mUri)));  //new File("/sdcard/cats.jpg")
-//        } 
-  
-        image.setImageURI(Uri.fromFile(new File(item.mUri)));  //new File("/sdcard/cats.jpg")
-        //Or with
-        //image.setImageURI(Uri.parse(new File(item.mUri).toString()));
-        
         return view;
     }
 	

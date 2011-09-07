@@ -16,8 +16,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
@@ -138,11 +136,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 		default:
 			break;
 		}
-		Drawable toRecycle= m_takenPhotoView.getDrawable(); 
-        if (toRecycle != null) 
-        {     
-        	((BitmapDrawable)m_takenPhotoView.getDrawable()).getBitmap().recycle(); 
-        } 
+		
 	}
 
 	@Override

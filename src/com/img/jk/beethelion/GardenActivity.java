@@ -12,14 +12,12 @@ import java.util.Iterator;
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Html;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +76,7 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
        m_flowerLayout = (LinearLayout) findViewById(R.id.infoLayout);
        m_textView = (TextView) findViewById(R.id.flowerInfo);
       
+       
        //get correct path of sd card
        File sdDir = Environment.getExternalStorageDirectory();
        String strPath = sdDir.getAbsolutePath()+"/beeTheLion/";
@@ -98,9 +97,15 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
        
 		String strFlower;
 		String strInfo;
+		final int dw; // width display
+		final int dh; // height display
+        Display currentDisplay = getWindowManager().getDefaultDisplay();
+		dw = currentDisplay.getWidth();
+		dh = currentDisplay.getHeight();
+		
 		// Prepare the ListView flower       
 		m_flowerAdapt = new FlowerAdapter();
-		m_flowerAdapt.add(new FlowerItem("´Í¡ÍÐäÃ?",strUnkFlowerPath + "/unknownFlower.jpg",0,""));
+		m_flowerAdapt.add(new FlowerItem("´Í¡ÍÐäÃ?",strUnkFlowerPath + "/unknownFlower.jpg",0,"",dw,dh));
         
         int numflower = gbV.flowerRank.size()>17?17:gbV.flowerRank.size();
 	    Iterator<String> iter=gbV.flowerRank.iterator();
@@ -113,9 +118,9 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 			 Cursor cursor = getFlower(flowerID); 
 		     strInfo = showEvents(cursor); 
 		     if(strInfo.length()==0)
-		    	 m_flowerAdapt.add(new FlowerItem(m_strFlowerName,strFlowerDBPath+ strFlower,flowerID,strTmpInfo));
+		    	 m_flowerAdapt.add(new FlowerItem(m_strFlowerName,strFlowerDBPath+ strFlower,flowerID,strTmpInfo,dw,dh));
 		     else
-		    	 m_flowerAdapt.add(new FlowerItem(m_strFlowerName,strFlowerDBPath+ strFlower,flowerID,strInfo));
+		    	 m_flowerAdapt.add(new FlowerItem(m_strFlowerName,strFlowerDBPath+ strFlower,flowerID,strInfo,dw,dh));
 		      
 		}
 		
@@ -130,7 +135,6 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
        // Prepare the flower information
        m_flowerLayout.setClickable(true);
        m_flowerLayout.setFocusable(true);
-        //m_flowerLayout.setFocusableInTouchMode(true);
         m_flowerLayout.setOnClickListener(this);
        
       
@@ -154,26 +158,23 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
         //start to destroy bitmap in Grid Adapter
         //first need to get viewgroup. 2 get id image from such viewgroup
         //3 get Drawable from imageview and recycle;
-    	 int idx;
-    	 for(idx=0;idx<m_flowerList.getCount();idx++)
-    	 {
-    	 ViewGroup myview = (ViewGroup) m_flowerAdapt.getView(idx,m_flowerList.getChildAt(idx), m_flowerList);
-    	 final ImageView image = ((ImageView)myview.findViewById(R.id.icon));
-    	
-	         Drawable toRecycle= image.getDrawable(); 
-	         if (toRecycle != null) 
-	         {     
-	         	((BitmapDrawable)image.getDrawable()).getBitmap().recycle(); 
-	         } 
-    	 }
+//    	 int idx;
+//    	 for(idx=0;idx<m_flowerList.getCount();idx++)
+//    	 {
+//    	 ViewGroup myview = (ViewGroup) m_flowerAdapt.getView(idx,m_flowerList.getChildAt(idx), m_flowerList);
+//    	 final ImageView image = ((ImageView)myview.findViewById(R.id.icon));
+//    	
+//	         Drawable toRecycle= image.getDrawable(); 
+//	         if (toRecycle != null) 
+//	         {     
+//	         	((BitmapDrawable)image.getDrawable()).getBitmap().recycle(); 
+//	          	Log.e("karnx", "onDestroy Garden clear gridview "+idx );
+//
+//	         } 
+//    	 }
         
        	 m_flowerAdapt.clear();
     	 m_flowerAdapt = null;
-    	 Drawable toRecycle= m_imageView.getDrawable(); 
-         if (toRecycle != null) 
-         {     
-         	((BitmapDrawable)m_imageView.getDrawable()).getBitmap().recycle(); 
-         } 
     	 
     	 m_mediaPlayerFlowerPark.stop();
  		m_mediaPlayerFlowerPark.release();
@@ -221,16 +222,10 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 		{
 			if( m_prePosition != position)
 			{
-	         Drawable toRecycle= m_imageView.getDrawable(); 
-	         if (toRecycle != null) 
-	         {     
-	         	((BitmapDrawable)m_imageView.getDrawable()).getBitmap().recycle(); 
-	         } 
-	         String strUri = m_flowerAdapt.getItemUri(position); 
-	         Log.e("itemclick","file path:"+ strUri);
-			 m_imageView.setImageURI(Uri.fromFile(new File(strUri)));  //new File("/sdcard/cats.jpg")
-			FlowerItem item  = (FlowerItem) m_flowerAdapt.getItem(position);
-			m_textView.setText(Html.fromHtml(item.m_info));
+				FlowerItem item  = (FlowerItem) m_flowerAdapt.getItem(position);
+				m_textView.setText(Html.fromHtml(item.m_info));
+				m_imageView.setImageBitmap(item.m_bmp);
+				Log.e("itemclick","pos:"+ position);
 			}
 			applyRotation(position, 0, 90);
 		}
