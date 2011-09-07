@@ -66,8 +66,8 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			mediaPlayerBee.setLooping(true);
 			mediaPlayerBee.start();
 			// setTitle("กำลังทำงาน ...");
-			// Why the setting title cause error which is "Canvas: trying to use a
-			// recycled bitmap android.graphics.Bitmap@481c6fd0"
+			// Why does the setting title cause error which is "Canvas: trying to use a
+			// recycled bitmap android.graphics.Bitmap@481c6fd0"?
 			
 			saveHistoryPhoto();
 			
