@@ -87,19 +87,19 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			mediaPlayerBB = MediaPlayer.create(this, R.raw.blackberry);
 			mediaPlayerBB.start();
 			
+			// Clear memory to prevent memory leak.
+			Drawable toRecycle = m_takenPhotoView.getDrawable();
+	        if (toRecycle != null)
+	        {
+	        	((BitmapDrawable)m_takenPhotoView.getDrawable()).getBitmap().recycle();
+	        }
+			
 			this.finish();
 			break;
 			
 		default:
 			break;
 		}
-
-		// Clear memory to prevent memory leak.
-		Drawable toRecycle = m_takenPhotoView.getDrawable();
-        if (toRecycle != null)
-        {
-        	((BitmapDrawable)m_takenPhotoView.getDrawable()).getBitmap().recycle();
-        }
 	}
 
 	@Override

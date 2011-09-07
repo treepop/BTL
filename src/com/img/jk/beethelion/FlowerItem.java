@@ -55,7 +55,8 @@ class FlowerItem {
         //Decode it for real
         bmpFactoryOptions.inJustDecodeBounds = false;
         this.m_bmp = BitmapFactory.decodeFile(uri, bmpFactoryOptions);
-        
+        // Joe found this line still error.
+        // java.lang.OutOfMemoryError: bitmap size exceeds VM budget.
     }
 
 }

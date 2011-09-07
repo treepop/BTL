@@ -43,7 +43,7 @@ using namespace cv;
 typedef vector<KeyPoint> vecKey;
 typedef vector<DMatch> vecDMatch;
 
-const int numTopSmall = 7; // Keep only top 25 lowest distance.
+const int numTopSmall = 25; // Keep only top 25 lowest distance.
 
 struct disStruct
 {
