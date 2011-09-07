@@ -388,6 +388,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		}
 		x10Camera.startPreview();
 //		mPreviewRunning = true;
+		x10Camera.autoFocus(x10AutoFocusCallbackFirstOpenCamera);
         
         // For debug.
         // =========
@@ -505,6 +506,14 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		public void onAutoFocus(boolean success, Camera camera) {
 			if(success) {
 				x10Camera.takePicture(previewCallback, rawCallback, jpegCallback);
+			}
+		}
+	};
+	
+	AutoFocusCallback x10AutoFocusCallbackFirstOpenCamera = new AutoFocusCallback() {
+		@Override
+		public void onAutoFocus(boolean success, Camera camera) {
+			if(success) {
 			}
 		}
 	};
