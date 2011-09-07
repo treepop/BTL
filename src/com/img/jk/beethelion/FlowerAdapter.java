@@ -102,8 +102,8 @@ class FlowerAdapter extends BaseAdapter {
         final TextView text = ((TextView)view.findViewById(R.id.text));
         final ImageView image = ((ImageView)view.findViewById(R.id.icon));
 
+        text.setText(item.name);
         image.setImageBitmap(item.m_bmp);
-  
         //image.setImageURI(Uri.fromFile(new File(item.mUri)));  //new File("/sdcard/cats.jpg")
         //Or with
         //image.setImageURI(Uri.parse(new File(item.mUri).toString()));
@@ -121,9 +121,7 @@ class FlowerAdapter extends BaseAdapter {
         }
         Log.e("karnx",item.name.toString() + " " + index);
         
-        CharSequence strSeq =text.getText();
-        if(strSeq.length()== 0)
-        	text.setText(item.name);
+        
         return view;
     }
 	
