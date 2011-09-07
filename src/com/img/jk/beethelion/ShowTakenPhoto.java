@@ -16,8 +16,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,19 +36,20 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 	MediaPlayer mediaPlayerBB;
 	MediaPlayer mediaPlayerBee;
 	private ImageView m_takenPhotoView;
+	private ImageButton acceptBtn, rejectBtn;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.showtakenphoto);
 		
-		
 		// Connect all objects in layout.
 		m_takenPhotoView = (ImageView)findViewById(R.id.takenPhotoView);
 		gbV = (GlobalVar)getApplicationContext();
 		m_takenPhotoView.setImageBitmap(gbV.getBmpPhoto());
-		ImageButton acceptBtn = (ImageButton)findViewById(R.id.acceptBtn);
+		acceptBtn = (ImageButton)findViewById(R.id.acceptBtn);
 		acceptBtn.setOnClickListener(this);
-		ImageButton rejectBtn = (ImageButton)findViewById(R.id.rejectBtn);
+		rejectBtn = (ImageButton)findViewById(R.id.rejectBtn);
 		rejectBtn.setOnClickListener(this);
 	}
 
@@ -53,79 +57,32 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 	public void onClick(View v) {
 		switch(v.getId()) {
 		case R.id.acceptBtn:
+			acceptBtn.setClickable(false);
+			rejectBtn.setClickable(false);
 			// Play sound effect click.
 			mediaPlayerBB = MediaPlayer.create(this, R.raw.blackberry);
 			mediaPlayerBB.start();
 			mediaPlayerBee = MediaPlayer.create(this, R.raw.flowerpark_midi);
 			mediaPlayerBee.setLooping(true);
 			mediaPlayerBee.start();
+			// setTitle("กำลังทำงาน ...");
+			// Why the setting title cause error which is "Canvas: trying to use a
+			// recycled bitmap android.graphics.Bitmap@481c6fd0"
 			
 			saveHistoryPhoto();
 			
-			Toast.makeText(this, "Call matching module.", Toast.LENGTH_SHORT).show();
-			long timerStart,timerStop;
-			timerStart = System.currentTimeMillis();
-			MatchingLib.jkMatching(gbV.getStrBeeDir());
-			timerStop = System.currentTimeMillis();
-			gbV.setStrFNameResultMatching(MatchingLib.matchesPath);
+			// Call OpenCV via NDK to calculate Matching module.
+			// =================================================
+			// Change calling MatchingLib in thread instead.
+			// MatchingLib.jkMatching(gbV.getStrBeeDir());
+			CalMatching openCVNDK = new CalMatching();
+			openCVNDK.execute(gbV.getStrBeeDir());
 			
-			mediaPlayerBee.stop();
-			mediaPlayerBee.release();
-			
-			Toast.makeText(this, String.format("จำนวน vector = %d", MatchingLib.numVec),
-					Toast.LENGTH_SHORT).show();
-			Toast.makeText(this, String.format("ใช้เวลาหา  %.2f วินาที",
-					(timerStop - timerStart)/1000.0), Toast.LENGTH_LONG).show();
-			
-			// Read rank photo and give it to vector.
-			File rankFile = new File(gbV.getStrFNameResultMatching());
-			FileReader fr = null;
-			try {
-				fr = new FileReader(rankFile);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			BufferedReader br = new BufferedReader(fr);
-			String line;
-			try {
-				while((line = br.readLine()) != null)
-				{
-					// Call function to create unique rank of species.
-					gbV.addFlowerRank(line);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			finally {
-				if(br != null)
-				try {
-					br.close();
-					br = null;
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-			// How to get the flower rank.
-			// An example code for Karn.
-			/*for(String strFlower:gbV.flowerRank) {
-				Integer i = Integer.valueOf(strFlower);
-				strFlower = strFlower.concat("_1.jpg");
-				Toast.makeText(this, i.toString() + "&" + strFlower.toString(),
-						Toast.LENGTH_SHORT).show();
-			}*/
-			
-			// show matching flower
-			Intent i = new Intent(this,GardenActivity.class);
-			startActivity(i);
-			
-			this.finish();
-//			startActivity(new Intent(
-//	                this,
-//	                GardenActivity.class));
 			break;
 			
 		case R.id.rejectBtn:
+			rejectBtn.setClickable(false);
+			acceptBtn.setClickable(false);
 			// Play sound effect click.
 			mediaPlayerBB = MediaPlayer.create(this, R.raw.blackberry);
 			mediaPlayerBB.start();
@@ -136,7 +93,13 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 		default:
 			break;
 		}
-		
+
+		// Clear memory to prevent memory leak.
+		Drawable toRecycle = m_takenPhotoView.getDrawable();
+        if (toRecycle != null)
+        {
+        	((BitmapDrawable)m_takenPhotoView.getDrawable()).getBitmap().recycle();
+        }
 	}
 
 	@Override
@@ -149,7 +112,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 	}
 	
 	private void saveHistoryPhoto() {
-	// Save flower photo for research further.
+		// Save flower photo for research further.
 		// Obtain running number for naming UNKNOWN_FLOWER.
 		// For instance, unknownFlower0001.jpg.
 		// ================================================
@@ -287,6 +250,91 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 					}
 				}
 			}
+		}
+	}
+	
+	// Call OpenCV NDK in AsyncTask to prevent not respond error.
+	private final class CalMatching extends AsyncTask<String, Void, Void> {
+		long timerStart,timerStop;
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			Toast.makeText(ShowTakenPhoto.this, "กำลังทำงาน ...",
+					Toast.LENGTH_LONG).show();
+			timerStart = System.currentTimeMillis();
+		}
+		
+		@Override
+		protected Void doInBackground(String... params) {
+			publishProgress();
+			MatchingLib.jkMatching(params[0]);
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			timerStop = System.currentTimeMillis();
+			gbV.setStrFNameResultMatching(MatchingLib.matchesPath);
+			
+			mediaPlayerBee.stop();
+			mediaPlayerBee.release();
+			
+			Toast.makeText(ShowTakenPhoto.this, String.format("จำนวน vector = %d",
+					MatchingLib.numVec), Toast.LENGTH_SHORT).show();
+			Toast.makeText(ShowTakenPhoto.this, String.format("ใช้เวลาหา  %.2f วินาที",
+					(timerStop - timerStart)/1000.0), Toast.LENGTH_LONG).show();
+			
+			// Read rank photo and give it to vector.
+			File rankFile = new File(gbV.getStrFNameResultMatching());
+			FileReader fr = null;
+			try {
+				fr = new FileReader(rankFile);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			BufferedReader br = new BufferedReader(fr);
+			String line;
+			try {
+				while((line = br.readLine()) != null)
+				{
+					// Call function to create unique rank of species.
+					gbV.addFlowerRank(line);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			finally {
+				if(br != null)
+				try {
+					br.close();
+					br = null;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			// How to get the flower rank.
+			// An example code for Karn.
+			/*for(String strFlower:gbV.flowerRank) {
+				Integer i = Integer.valueOf(strFlower);
+				strFlower = strFlower.concat("_1.jpg");
+				Toast.makeText(this, i.toString() + "&" + strFlower.toString(),
+						Toast.LENGTH_SHORT).show();
+			}*/
+			
+			// show matching flower
+			Intent i = new Intent(ShowTakenPhoto.this,GardenActivity.class);
+			startActivity(i);
+			
+			ShowTakenPhoto.this.finish();
+		}
+
+		@Override
+		protected void onProgressUpdate(Void... values) {
+			super.onProgressUpdate(values);
+			// Don't have anything to do yet.
 		}
 	}
 }
