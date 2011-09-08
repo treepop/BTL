@@ -506,6 +506,10 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		public void onAutoFocus(boolean success, Camera camera) {
 			if(success) {
 				x10Camera.takePicture(previewCallback, rawCallback, jpegCallback);
+			} else {
+				// This part will never to reach. I don't know why?
+				Toast.makeText(mainActivity.this,"ปรับละเอียด ไม่สำเร็จ",
+						Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
