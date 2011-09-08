@@ -277,8 +277,10 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 				paint = null;
 				canvas = null;
 				// rotatedBmp.recycle(); // Enable this cause to "Canvas: trying to
-										 // use a recycled bitmap". I can't solve it.
-				// rotatedBmp = null;
+										 // use a recycled bitmap". I understand it,
+										 // because gbV.setBmpPhoto(rotatedBmp) still
+										 // use this Bitmap.
+				rotatedBmp = null;
 				bmp.recycle();
 				bmp = null;
 				

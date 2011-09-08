@@ -93,6 +93,8 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 	        {
 	        	((BitmapDrawable)m_takenPhotoView.getDrawable()).getBitmap().recycle();
 	        }
+	        
+	        gbV.clearAll();
 			
 			this.finish();
 			break;

@@ -69,6 +69,7 @@ public class GlobalVar extends Application {
 	
 	public void clearAll() {
 		bmpPhoto.recycle();
+		bmpPhoto = null;
 		flowerRank.clear();
 		cacheFlowerRank.clear();
 	}
