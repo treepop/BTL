@@ -40,6 +40,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		RamLib.ramStatus();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.showtakenphoto);
 		
@@ -69,7 +70,11 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			// Why does the setting title cause error which is "Canvas: trying to use a
 			// recycled bitmap android.graphics.Bitmap@481c6fd0"?
 			
-			saveHistoryPhoto();
+			if(!mainActivity.RUN_ON_USER_PHONE) {
+				saveHistoryPhoto();
+			}
+			
+			RamLib.ramStatus();
 			
 			// Call OpenCV via NDK to calculate Matching module.
 			// =================================================
@@ -270,7 +275,9 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 		@Override
 		protected Void doInBackground(String... params) {
 			publishProgress();
+			RamLib.ramStatus();
 			MatchingLib.jkMatching(params[0]);
+			RamLib.ramStatus();
 			return null;
 		}
 
