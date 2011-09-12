@@ -488,7 +488,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			this.finish();
+			System.exit(0); // Exit program.
 		}
 		return super.onKeyDown(keyCode, event);
 	}
