@@ -101,7 +101,7 @@ AdapterView.OnItemClickListener,  View.OnClickListener  {
 		final int dh; // height display
         Display currentDisplay = getWindowManager().getDefaultDisplay();
 		dw = currentDisplay.getWidth();
-		dh = currentDisplay.getHeight();
+		dh = (int) Math.floor(currentDisplay.getHeight()/2);
 		
 		// Prepare the ListView flower       
 		m_flowerAdapt = new FlowerAdapter();
