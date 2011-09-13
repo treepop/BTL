@@ -82,6 +82,8 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 	public static final int LARGEST_WIDTH = 800;
 	public static final int LARGEST_HEIGHT = 600;
 	
+	public static final Boolean RUN_ON_USER_PHONE = false;
+	
 	GlobalVar gbV;
 	private Camera x10Camera;
 //	MediaPlayer mediaPlayerBee;
@@ -93,6 +95,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	RamLib.ramStatus();
         super.onCreate(savedInstanceState);
         
         // requestWindowFeature(Window.FEATURE_NO_TITLE); //Don't show the title bar.
@@ -277,8 +280,10 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 				paint = null;
 				canvas = null;
 				// rotatedBmp.recycle(); // Enable this cause to "Canvas: trying to
-										 // use a recycled bitmap". I can't solve it.
-				// rotatedBmp = null;
+										 // use a recycled bitmap". I understand it,
+										 // because gbV.setBmpPhoto(rotatedBmp) still
+										 // use this Bitmap.
+				rotatedBmp = null;
 				bmp.recycle();
 				bmp = null;
 				
@@ -288,6 +293,7 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 	};
 	
 	void done() {
+		RamLib.ramStatus();
 		Intent i = new Intent(this,ShowTakenPhoto.class);
 		startActivity(i);
 		// finish(); // Exit program.
@@ -506,6 +512,10 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 		public void onAutoFocus(boolean success, Camera camera) {
 			if(success) {
 				x10Camera.takePicture(previewCallback, rawCallback, jpegCallback);
+			} else {
+				// This part will never to reach. I don't know why?
+				Toast.makeText(mainActivity.this,"ปรับละเอียด ไม่สำเร็จ",
+						Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
