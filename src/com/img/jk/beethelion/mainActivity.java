@@ -34,10 +34,15 @@
 package com.img.jk.beethelion;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -79,6 +84,9 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 	private static final String RUNNING_NUMBER_FILE = "runningNumber.txt";
 	private static final String DIR_OF_PROGRAM = "beeTheLion";
 	private static final String DIR_OF_HISTORY_PHOTO = "historyPhoto";
+	private static final String DB_OF_PROGRAM = "beethelion.db";
+	private static final String DIR_OF_DESCRIPTION = "descriptionDB";
+	private static final String DIR_OF_FLOWERPIC = "flowerPicDB";
 	public static final int LARGEST_WIDTH = 800;
 	public static final int LARGEST_HEIGHT = 600;
 	
@@ -101,6 +109,82 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
         // requestWindowFeature(Window.FEATURE_NO_TITLE); //Don't show the title bar.
         
         setContentView(R.layout.main);
+        
+        // Copy data from .apk to sd-card on first time.
+        // =============================================
+        String strBeeDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+        	+ "/" + DIR_OF_PROGRAM;
+        File beeDir = new File(strBeeDir);
+        if(!beeDir.exists()) {
+        	beeDir.mkdir();
+        }
+        beeDir = null;
+        
+        try {
+        	String destPath = strBeeDir + "/" + DB_OF_PROGRAM;
+        	File f = new File(destPath);
+        	if(!f.exists()) {
+        		CopyDB(getBaseContext().getAssets().open(DB_OF_PROGRAM),
+        				new FileOutputStream(destPath));
+        		
+        		File descDir = new File(strBeeDir + "/" + DIR_OF_DESCRIPTION);
+        		if(!descDir.exists()) {
+        			descDir.mkdir();
+        		}
+        		CopyDB(getBaseContext().getAssets().open(DIR_OF_DESCRIPTION + ".txt"),
+        				new FileOutputStream
+        					(descDir + ".txt"));
+        		File picDir = new File(strBeeDir + "/" + DIR_OF_FLOWERPIC);
+        		if(!picDir.exists()) {
+        			picDir.mkdir();
+        		}
+        		CopyDB(getBaseContext().getAssets().open(DIR_OF_FLOWERPIC + ".txt"),
+        				new FileOutputStream
+        					(picDir + ".txt"));
+        		
+        		// Read a list of files then write.
+        		BufferedReader brDesc = new BufferedReader(new FileReader(descDir
+        				+ ".txt"));
+        		String line;
+        		List<String> descList = new ArrayList<String>();
+        		while((line = brDesc.readLine()) != null) {
+        			descList.add(line);
+        		}
+        		for(String s:descList) {
+        			CopyDB(getBaseContext().getAssets().open(DIR_OF_DESCRIPTION + "/"
+        					+ s), new FileOutputStream(descDir + "/" + s));
+        		}
+        		
+        		BufferedReader brPic = new BufferedReader(new FileReader(picDir
+        				+ ".txt"));
+        		List<String> picList = new ArrayList<String>();
+        		while((line = brPic.readLine()) != null) {
+        			picList.add(line);
+        		}
+        		for(String s:picList) {
+        			CopyDB(getBaseContext().getAssets().open(DIR_OF_FLOWERPIC + "/"
+        					+ s), new FileOutputStream(picDir + "/" + s));
+        		}
+
+        		descList.clear();
+        		descList = null;
+        		brDesc.close();
+        		brDesc = null;
+        		descDir = null;
+        		
+        		picList.clear();
+        		picList = null;
+        		brPic.close();
+        		brPic = null;
+        		picDir = null;
+        	}
+        	f = null;
+        } catch (FileNotFoundException e) {
+        	e.printStackTrace();
+        } catch (IOException e) {
+        	e.printStackTrace();
+        }
+        // =============================================
         
         // Connect SurfaceView.
         SurfaceView x10SurfaceView;
@@ -527,4 +611,16 @@ public class mainActivity extends Activity implements SurfaceHolder.Callback,
 			}
 		}
 	};
+	
+	private void CopyDB(InputStream inputStream, OutputStream outputStream)
+		throws IOException {
+		byte[] buffer = new byte[1024];
+		int length;
+		while((length = inputStream.read(buffer)) > 0) {
+			outputStream.write(buffer, 0, length);
+		}
+		inputStream.close();
+		outputStream.flush();
+		outputStream.close();
+	}
 }

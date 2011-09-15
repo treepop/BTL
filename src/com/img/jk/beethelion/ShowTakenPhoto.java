@@ -306,8 +306,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 			BufferedReader br = new BufferedReader(fr);
 			String line;
 			try {
-				while((line = br.readLine()) != null)
-				{
+				while((line = br.readLine()) != null) {
 					// Call function to create unique rank of species.
 					gbV.addFlowerRank(line);
 				}
