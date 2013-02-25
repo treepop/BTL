@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.img.jk.beethelion"
       android:versionCode="3"
-      android:versionName="1.1.0"
+      android:versionName="1.1.1"
       android:installLocation="preferExternal"> <!-- It should install on SD-CARD 
       because it was big. Just use installLocation, size of program decrease from 7MB
       to 44KB. I don't know why? -->

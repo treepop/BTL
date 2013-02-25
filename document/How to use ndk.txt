@@ -1,0 +1,15 @@
+cd d:
+cd Practice/BeeTheLion
+ndk-build clean
+ndk-build
+จะเกิด file ใน ls -lh libs/armeabi-v7a/libbeethelionmatching.so
+
+วิธีสร้าง .h
+อยู่ที่ cd Practice/BeeTheLion
+cd bin
+javah -jni com.img.jk.beethelion.MatchingLib
+mv com_img_jk_beethelion_MatchingLib.h ../jni/
+
+วิธีเอาค่า Signature
+cd bin/com/img/jk/beethelion
+javap -s -private MatchingLib
