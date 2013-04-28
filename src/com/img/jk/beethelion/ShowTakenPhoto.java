@@ -13,6 +13,7 @@ import java.io.IOException;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -263,12 +264,17 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 	// Call OpenCV NDK in AsyncTask to prevent not respond error.
 	private final class CalMatching extends AsyncTask<String, Void, Void> {
 		long timerStart,timerStop;
+		ProgressDialog hourGlass = new ProgressDialog(ShowTakenPhoto.this);
 		
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			Toast.makeText(ShowTakenPhoto.this, "กำลังทำงาน ...",
-					Toast.LENGTH_LONG).show();
+			/* Toast.makeText(ShowTakenPhoto.this, "กำลังทำงาน ...",
+					Toast.LENGTH_LONG).show(); */
+			hourGlass.setMessage("กำลังระบุชนิดดอกไม้...");
+			hourGlass.setIndeterminate(true);
+			hourGlass.setCancelable(false);
+			hourGlass.show();
 			timerStart = System.currentTimeMillis();
 		}
 		
@@ -284,6 +290,7 @@ public class ShowTakenPhoto extends Activity implements OnClickListener,
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			hourGlass.dismiss();
 			timerStop = System.currentTimeMillis();
 			gbV.setStrFNameResultMatching(MatchingLib.matchesPath);
 			
